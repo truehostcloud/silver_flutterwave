@@ -1,13 +1,13 @@
 import paypalhttp
 from django.conf import settings
+from django.utils.module_loading import import_string
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from rave_python import Rave
 from rave_python.rave_exceptions import TransactionVerificationError
+
 from silver.payment_processors import PaymentProcessorBase
 from silver.payment_processors.forms import GenericTransactionForm
 from silver.payment_processors.mixins import TriggeredProcessorMixin
-
-from billing.silver_subscriptions import success_transaction_callback
 from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
@@ -86,7 +86,10 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             transaction.data = transaction_data
             if verify_transaction["error"] is False:
                 transaction.settle()
-                success_transaction_callback(transaction)
+                try:
+                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(transaction)
+                except AttributeError:
+                    pass
         except (TransactionVerificationError, paypalhttp.http_error.HttpError) as e:
             if payment_processor == "paypal":
                 transaction_data = {"fail_reason": e}
