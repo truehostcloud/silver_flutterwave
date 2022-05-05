@@ -1,8 +1,11 @@
 {% load static %} {% load custom_tags %}
+{% csrf_token%}
 
 <form id="nonce-form" action="{{ payment_complete_url }}" method="POST">
   <input id="nonce-field" name="payment_method_nonce" type="hidden" />
 </form>
+
+
 {% get_settings_value FLUTTERWAVE_PUBLIC_KEY "FLUTTERWAVE_PUBLIC_KEY" %}
 
 <script>
@@ -38,7 +41,11 @@
           },
       });
   }
+
+  
+
 </script>
+
 <script>
   paypal.Buttons({
     createOrder: function(data, actions) {
@@ -66,3 +73,178 @@
     }
   }).render('#paypal-button-container');
 </script>
+
+
+<!-- <div style="margin: auto">
+  <button type="button" style="width: 30%" onClick="stripePayment()">
+    Pay With Stripe
+  </button>
+</div> -->
+
+ <!-- <script>
+  function stripePayment() {
+    let payment_complete_url = "{{ payment_complete_url }}";
+    console.log("stripe payment");
+     stripe = Stripe('pk_test_51Kt455AVsErfOrz5rWoozmVZer7znsE4lbAliRNIgYRT8E7e3q0PDFjblX4dD6reWegif33Kdq5jTvIfXcQV6OUn006qgv1U9b');
+       var payment_options = {
+        clientsecret: '{{CLIENT_SECRET}}',
+        stripecustomerId: '{{stripecustomerId}}',
+        appearance: {},
+      };
+
+     elements = stripe.elements({
+      clientSecret : 'CLIENT_SECRET',
+
+     });
+     elements.update({locale: 'fr'});
+
+    elements.fetchUpdates()
+  .then(function(result) {
+    // Handle result.error
+  });
+
+
+    paymentElement = elements.create('payment', {
+      fields: {
+        billingDetails: {
+          name: '',
+          email: '',
+
+        },
+      },
+
+    });
+
+
+    stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: '',
+        payment_method_data: {
+          billing_details: {
+            name: 'Jenny Rosen',
+            email: 'jenny.rosen@example.com',
+          },
+        },
+
+      }
+
+
+        .then(function (result) {
+          if (result.error) {
+
+          }
+        }),
+    });
+
+  }
+
+</script> -->
+
+<script>
+  const stripe = Stripe('pk_test_51Kt455AVsErfOrz5rWoozmVZer7znsE4lbAliRNIgYRT8E7e3q0PDFjblX4dD6reWegif33Kdq5jTvIfXcQV6OUn006qgv1U9b');
+  const options = {
+    clientSecret: "{{ client_secret }}",
+    // Fully customizable with appearance API.
+    appearance: {/*...*/ },
+  };
+
+  // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 2
+  const elements = stripe.elements(options);
+
+  // Create and mount the Payment Element
+  const paymentElement = elements.create('payment');
+  paymentElement.mount('#payment-element');
+</script>
+ 
+
+
+
+ 
+
+<script>
+     function subscription(){
+      
+        console.log("subscription");
+
+        let payment_complete_url = "{{ payment_complete_url}} "
+        //  stripeButton
+          stripe = Stripe('pk_test_51Kt455AVsErfOrz5rWoozmVZer7znsE4lbAliRNIgYRT8E7e3q0PDFjblX4dD6reWegif33Kdq5jTvIfXcQV6OUn006qgv1U9b');
+          fetch("/create-checkout-session/")
+    .then((result) => { return result.json(); })
+    .then((data) => {
+      console.log(data);
+      // Redirect to Stripe Checkout
+      return stripe.redirectToCheckout({sessionId: data.sessionId})
+    })
+    .then((res) => {
+      console.log(res);
+    });
+         
+   const payment_options = {
+            clientsecret: '{{CLIENT_SECRET}}',
+            stripecustomerId: '{{stripecustomerId}}',
+            appearance: {},
+          }
+        var elements = stripe.elements(payment_options);
+        var paymentElement = elements.create('payment');
+        paymentElement.amount('#payment-element'); 
+         
+        const form = document.getElementById('payment-form');
+        // let form = document.getElementById("payment-form")
+        form.addEventListener('submit', async (event) => {
+          fetch("/create-checkout-session/")
+            .then((result) => { return result.json(); })
+            .then((data) => {
+              console.log(data);
+              // Redirect to Stripe Checkout
+              // return stripe.redirectToCheckout({ sessionId: data.sessionId })
+            })
+          event.preventDefault();
+          stripe.confirmPayment({
+            elements,
+            confirmParams: {
+
+              return_ulr: "",
+
+
+
+            }
+          });
+        })
+      }
+      
+        //   if (error) {
+        //     messageContainer = document.querySelector('#error-message');
+        //     messageContainer.textContent = error.message;
+        //   }
+        //   else {
+
+        //   }
+      
+        // // callback: function (data) {
+        // //   fetch(`${customer_subscription_created_url}?stripecustomerId=${data['StripeCustomerId']}&StripeSubscriptionId=${data['StripeSubscriptionId']}&status=${data['status']} `)
+        // //     .then(response => console.log(data));
+        // //   SAMES
+        // // },
+
+
+        // stripe.retrievePaymentIntent(clientsecret).then(({ retrievePaymentIntent }) => {
+        //   message = document.querySelector('message')
+        //   switch (PaymentIntent.status) {
+        //     case 'suceeded':
+        //       message.innerText = 'Payment successful.';
+        //       break
+
+        //     case 'processing':
+        //       message.innerText = 'Payment Failed. Try again.';
+        //       break;
+
+        //     default: message.innerText = 'Somethig is not right.';
+        //       break;
+        //   }
+        // });
+      
+      
+
+</script> 
