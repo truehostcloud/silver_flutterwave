@@ -12,11 +12,11 @@ from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
 import stripe
-from abc import ABC, abstractmethod
+from abc import ABC, ABCMeta, abstractmethod
 
 
 
-class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, ABC):
+class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, metaClass= ABCMeta):
     payment_method_class = FlutterWavePaymentMethod
     transaction_view_class = FlutterWaveTransactionView
     form_class = GenericTransactionForm
