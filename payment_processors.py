@@ -84,9 +84,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 }
             elif payment_processor == "stripe":
                 payment_intent = request.GET.get("payment_intent")
-                # payment_intent_client_secret = request.GET.get(
-                #     "payment_intent_client_secret"
-                # )
+                
                 stripe.api_key = settings.STRIPE_SECRET_KEY
                 verify_transaction = stripe.PaymentIntent.retrieve(payment_intent)
                 payment_status = verify_transaction.status

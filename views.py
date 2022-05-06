@@ -7,7 +7,8 @@ from money.currency import Currency
 
 
 class FlutterWaveTransactionView(GenericTransactionView):
-    def get_stripe_client_secret(self, transaction):
+    @staticmethod
+    def get_stripe_client_secret(transaction):
         """Get the Stripe client secret for the transaction."""
         url = "https://api.stripe.com/v1/payment_intents"
         amount = transaction.invoice.total
