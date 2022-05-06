@@ -45,6 +45,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
     @staticmethod
     def refund_transaction(self, transaction, payment_method=None):
         raise NotImplementedError()
+
     @staticmethod
     def void_transaction(self, transaction, payment_method=None):
         raise NotImplementedError()
@@ -83,11 +84,11 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 }
             elif payment_processor == "stripe":
                 payment_intent = request.GET.get("payment_intent")
-                payment_intent_client_secret = request.GET.get("payment_intent_client_secret")
-                stripe.api_key = settings.STRIPE_SECRET_KEY
-                verify_transaction = stripe.PaymentIntent.retrieve(
-                    payment_intent
+                payment_intent_client_secret = request.GET.get(
+                    "payment_intent_client_secret"
                 )
+                stripe.api_key = settings.STRIPE_SECRET_KEY
+                verify_transaction = stripe.PaymentIntent.retrieve(payment_intent)
                 payment_status = verify_transaction.status
                 if payment_status == "succeeded":
                     verify_transaction["error"] = False
@@ -102,7 +103,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             if verify_transaction["error"] is False:
                 transaction.settle()
                 try:
-                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(transaction)
+                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(
+                        transaction
+                    )
                 except AttributeError:
                     pass
         except (TransactionVerificationError, paypalhttp.http_error.HttpError) as e:

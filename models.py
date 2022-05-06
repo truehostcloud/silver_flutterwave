@@ -1,4 +1,5 @@
 from silver.models import PaymentMethod
+
 # from django.contrib.auth.models import User
 # from django.db import models
 
@@ -40,5 +41,3 @@ class FlutterWavePaymentMethod(PaymentMethod):
     @property
     def public_data(self):
         return self.data.get("details")
-
-
