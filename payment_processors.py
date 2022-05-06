@@ -87,7 +87,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             if verify_transaction["error"] is False:
                 transaction.settle()
                 try:
-                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(transaction)
+                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(
+                        transaction
+                    )
                 except AttributeError:
                     pass
         except (TransactionVerificationError, paypalhttp.http_error.HttpError) as e:
