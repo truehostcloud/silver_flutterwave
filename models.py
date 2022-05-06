@@ -1,8 +1,6 @@
 from silver.models import PaymentMethod
 
 
-
-
 class FlutterWavePaymentMethod(PaymentMethod):
     class Meta:
         proxy = True
