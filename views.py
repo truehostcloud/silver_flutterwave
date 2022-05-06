@@ -24,7 +24,6 @@ class FlutterWaveTransactionView(GenericTransactionView):
         intent_response = stripe.PaymentIntent.create(**payload)
         return intent_response.get("client_secret")
 
-
     def get_context_data(self):
         context_data = super(FlutterWaveTransactionView, self).get_context_data()
         payment_processor = get_instance(self.transaction.payment_processor)

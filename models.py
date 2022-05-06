@@ -41,6 +41,7 @@ class FlutterWavePaymentMethod(PaymentMethod):
     def public_data(self):
         return self.data.get("details")
 
+
 # class StripeCustomer(models.Model):
 #     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
 #     stripeCustomerId = models.CharField(max_length=255)
