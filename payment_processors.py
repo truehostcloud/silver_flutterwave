@@ -12,9 +12,11 @@ from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
 import stripe
+from abc import ABC, abstractmethod
 
 
-class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
+
+class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, ABC):
     payment_method_class = FlutterWavePaymentMethod
     transaction_view_class = FlutterWaveTransactionView
     form_class = GenericTransactionForm
@@ -42,17 +44,19 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
 
         FlutterWaveTriggeredBase._has_been_setup = True
 
+    
     def refund_transaction(self, transaction, payment_method=None):
         raise NotImplementedError()
 
-    def void_transaction(self, transaction, payment_method=None):
+    @abstractmethod
+    def void_transaction( self, transaction, payment_method=None):
         raise NotImplementedError()
 
     @staticmethod
     def charge_payment(transaction, payment_method=None):
         raise ValueError(transaction)
 
-    def manage_payment(self, transaction, payment_method=None):
+    def manage_payment( self,transaction, payment_method=None):
         raise NotImplementedError()
 
     @staticmethod
