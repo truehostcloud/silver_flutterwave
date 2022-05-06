@@ -20,30 +20,24 @@
       Pay Via Mobile Money
     </button>
   </div>
-  <form id="payment-form">
+
+  <form   id="payment-form">
     <div id="payment-element">
       <!-- Elements will create form elements here -->
     </div>
-    <button id="submit">Stripe</button>
-    <div id="error-message">
+    <div id="error-message" role="alert">
+      <button id="submit" >Stripe</button>
       <!-- Display error message to your customers here -->
     </div>
   </form>
+
 
     <button type="button" style="width: 30%" id="submitBtn" onclick="subscription()">
       Pay With Stripe
     </button>
 
+ 
 
-
-<!--   
-  <form id="payment-form">
-    <div id="payment-element">
-  
-     <div id="error-message">
-      
-    </div>
-  </form> -->
 
   
   <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
@@ -51,8 +45,7 @@
     <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank">Download Invoice</a>
   </div>
 </div>
-<!-- <script type="text/javascript" src="./user.js"></script> -->
-  
+
 
 
 <!-- Configuration options:
