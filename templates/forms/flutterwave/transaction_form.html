@@ -4,50 +4,27 @@
 <!-- Load the flutterwave component. -->
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
-<script src="https://js.stripe.com/v3/"></script>
 {% endblock %} {% block form %}
 <div
   style="
     vertical-align: middle;
     text-align: center;
     margin: auto;
-    align: center;">
-
-
-
+    align: center;
+  "
+>
   <div style="margin: auto">
     <button type="button" style="width: 30%" onClick="makePayment()">
       Pay Via Mobile Money
     </button>
   </div>
-
-  <form   id="payment-form">
-    <div id="payment-element">
-      <!-- Elements will create form elements here -->
-    </div>
-    <div id="error-message" role="alert">
-      <button id="submit" >Stripe</button>
-      <!-- Display error message to your customers here -->
-    </div>
-  </form>
-
-
-    <button type="button" style="width: 30%" id="submitBtn" onclick="subscription()">
-      Pay With Stripe
-    </button>
-
- 
-
-
-  
   <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
   <div style="margin: auto; width: 30%">
-    <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank">Download Invoice</a>
+    <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank"
+      >Download Invoice</a
+    >
   </div>
 </div>
-
-
-
 <!-- Configuration options:
           data-color: "blue", "gold", "silver"
           data-size: "tiny", "small", "medium"
@@ -55,13 +32,6 @@
           data-button_disabled: "false", "true"
           data-button_type: "submit", "button"
         --->
-{% include "forms/flutterwave/flutterwave_ui.html" %} {% endblock %} 
-{% block transaction %} 
-{{ block.super }} 
-{{ payment_method.data.details }}
-{% endblock %}
-{{ block.document_details }}
-
-
-
-
+{% include "forms/flutterwave/flutterwave_ui.html" %} {% endblock %} {% block
+transaction %} {{ block.super }} {{ payment_method.data.details }} {% endblock
+%} {{ block.document_details }}
