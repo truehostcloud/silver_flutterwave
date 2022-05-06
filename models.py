@@ -1,7 +1,6 @@
 from silver.models import PaymentMethod
 
-# from django.contrib.auth.models import User
-# from django.db import models
+
 
 
 class FlutterWavePaymentMethod(PaymentMethod):
