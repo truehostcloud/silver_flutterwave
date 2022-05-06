@@ -10,14 +10,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='FlutterWavePaymentMethod',
-            fields=[
-            ],
+            name="FlutterWavePaymentMethod",
+            fields=[],
             options={
-                'proxy': True,
-                'indexes': [],
-                'constraints': [],
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
             },
-            bases=('silver.paymentmethod',),
+            bases=("silver.paymentmethod",),
         ),
     ]

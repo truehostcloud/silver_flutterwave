@@ -1,6 +1,5 @@
-{% extends 'forms/transaction_form.html' %} {% block extrahead %}
-{% load custom_tags %}
-{% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
+{% extends 'forms/transaction_form.html' %} {% block extrahead %} {% load
+custom_tags %} {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
 <!-- Load the flutterwave component. -->
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
