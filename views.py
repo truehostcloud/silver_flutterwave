@@ -1,15 +1,16 @@
 from silver.payment_processors import get_instance
 from silver.payment_processors.views import GenericTransactionView
 from django.conf import settings
-import requests
-from urllib.parse import urlencode
+# import requests
+# from urllib.parse import urlencode
 import stripe
 from money.money import Money
 from money.currency import Currency
 
 
 class FlutterWaveTransactionView(GenericTransactionView):
-    def get_stripe_client_secret(self, transaction):
+    
+    def get_stripe_client_secret(transaction):
         """Get the Stripe client secret for the transaction."""
         url = "https://api.stripe.com/v1/payment_intents"
         amount = transaction.invoice.total
