@@ -12,7 +12,7 @@ from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
 import stripe
-from abc import ABC, ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 
 class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, ABC):
