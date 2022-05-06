@@ -11,11 +11,9 @@ from silver.payment_processors.mixins import TriggeredProcessorMixin
 from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
-import stripe
-from abc import ABC, abstractmethod
 
 
-class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, ABC):
+class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
     payment_method_class = FlutterWavePaymentMethod
     transaction_view_class = FlutterWaveTransactionView
     form_class = GenericTransactionForm
@@ -46,7 +44,6 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, AB
     def refund_transaction(self, transaction, payment_method=None):
         raise NotImplementedError()
 
-    @abstractmethod
     def void_transaction(self, transaction, payment_method=None):
         raise NotImplementedError()
 
@@ -81,16 +78,6 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, AB
                     "intent": order_response.result.intent,
                     "error": order_error,
                 }
-            elif payment_processor == "stripe":
-                payment_intent = request.GET.get("payment_intent")
-
-                stripe.api_key = settings.STRIPE_SECRET_KEY
-                verify_transaction = stripe.PaymentIntent.retrieve(payment_intent)
-                payment_status = verify_transaction.status
-                if payment_status == "succeeded":
-                    verify_transaction["error"] = False
-                else:
-                    verify_transaction["error"] = payment_status
             else:
                 verify_transaction = self.rave.Account.verify(tx_ref)
             transaction_data = {}
@@ -100,9 +87,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, AB
             if verify_transaction["error"] is False:
                 transaction.settle()
                 try:
-                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(
-                        transaction
-                    )
+                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(transaction)
                 except AttributeError:
                     pass
         except (TransactionVerificationError, paypalhttp.http_error.HttpError) as e:
