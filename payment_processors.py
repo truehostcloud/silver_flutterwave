@@ -11,11 +11,9 @@ from silver.payment_processors.mixins import TriggeredProcessorMixin
 from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
-import stripe
-from abc import ABC, abstractmethod
 
 
-class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, ABC):
+class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
     payment_method_class = FlutterWavePaymentMethod
     transaction_view_class = FlutterWaveTransactionView
     form_class = GenericTransactionForm
