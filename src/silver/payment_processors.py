@@ -87,7 +87,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, AB
                 )
 
                 stripe.api_key = settings.STRIPE_SECRET_KEY
-                verify_transaction = stripe.PaymentIntent.retrieve(payment_intent,payment_intent_client_secret)
+                verify_transaction = stripe.PaymentIntent.retrieve(
+                    payment_intent, payment_intent_client_secret
+                )
                 payment_status = verify_transaction.status
                 if payment_status == "succeeded":
                     verify_transaction["error"] = False
