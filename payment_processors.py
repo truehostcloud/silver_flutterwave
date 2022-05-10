@@ -5,7 +5,7 @@ from paypalcheckoutsdk.orders import OrdersGetRequest
 from rave_python import Rave
 from rave_python.rave_exceptions import TransactionVerificationError
 
-from silver.payment_processors import PaymentProcessorBase
+from src.silver.payment_processors import PaymentProcessorBase
 from silver.payment_processors.forms import GenericTransactionForm
 from silver.payment_processors.mixins import TriggeredProcessorMixin
 from .models import FlutterWavePaymentMethod
