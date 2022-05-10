@@ -11,7 +11,7 @@ from silver.payment_processors.mixins import TriggeredProcessorMixin
 from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
-import stripe 
+import stripe
 
 
 class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
@@ -86,7 +86,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 )
 
                 stripe.api_key = settings.STRIPE_SECRET_KEY
-                verify_transaction = stripe.PaymentIntent.retrieve(payment_intent, payment_intent_client_secret)
+                verify_transaction = stripe.PaymentIntent.retrieve(
+                    payment_intent, payment_intent_client_secret
+                )
                 payment_status = verify_transaction.status
                 if payment_status == "succeeded":
                     verify_transaction["error"] = False
