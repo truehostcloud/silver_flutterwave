@@ -17,9 +17,7 @@ custom_tags %} {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
       Pay Via Mobile Money
     </button>
   </div>
-  <<<<<<< HEAD
-
-  <form id="payment-form">
+    <form id="payment-form">
     <div id="payment-element">
       <!-- Elements will create form elements here -->
     </div>
@@ -28,8 +26,6 @@ custom_tags %} {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
       <!-- Display error message to your customers here -->
     </div>
   </form>
-
-  ======= >>>>>>> 04290eee115a34652516fe9075e558f41731bab8
   <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
   <div style="margin: auto; width: 30%">
     <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank"
