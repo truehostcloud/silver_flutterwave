@@ -46,7 +46,6 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, AB
     def refund_transaction(self, transaction, payment_method=None):
         raise NotImplementedError()
 
-   
     def void_transaction(self, transaction, payment_method=None):
         raise NotImplementedError()
 
@@ -84,8 +83,8 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin, AB
             elif payment_processor == "stripe":
                 payment_intent = request.GET.get("payment_intent")
                 payment_intent_client_secret = request.GET.get(
-                     "payment_intent_client_secret"
-                 )
+                    "payment_intent_client_secret"
+                )
 
                 stripe.api_key = settings.STRIPE_SECRET_KEY
                 verify_transaction = stripe.PaymentIntent.retrieve(payment_intent,payment_intent_client_secret)
