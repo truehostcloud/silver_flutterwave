@@ -33,5 +33,5 @@ class FlutterWaveTransactionView(GenericTransactionView):
             self.transaction.payment_method
         )
 
-        context_data["client_secret"] =self.get_stripe_client_secret(self.transaction)
+        context_data["client_secret"] = self.get_stripe_client_secret(self.transaction)
         return context_data

@@ -1,4 +1,5 @@
-{% load static %} {% load custom_tags %} {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %} 
+{% load static %} {% load custom_tags %} {% get_settings_value PAYPAL_CLIENT_ID
+"PAYPAL_CLIENT_ID" %}
 
 <form id="nonce-form" action="{{ payment_complete_url }}" method="POST">
   <input id="nonce-field" name="payment_method_nonce" type="hidden" />
