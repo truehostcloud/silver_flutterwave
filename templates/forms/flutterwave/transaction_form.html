@@ -1,8 +1,9 @@
-{% extends 'forms/transaction_form.html' %} {% block extrahead %} {% load
-custom_tags %} {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
+{% extends 'forms/transaction_form.html' %} {% block extrahead %} 
+<!-- {% load custom_tags %}  -->
 <!-- Load the flutterwave component. -->
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
+<script src="https://js.stripe.com/v3/"></script>
 {% endblock %} {% block form %}
 <div
   style="
@@ -17,15 +18,17 @@ custom_tags %} {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
       Pay Via Mobile Money
     </button>
   </div>
+
   <form id="payment-form">
     <div id="payment-element">
       <!-- Elements will create form elements here -->
     </div>
     <div id="error-message" role="alert">
-      <button id="submit">Pay With Stripe</button>
+      <button id="submit" >Pay With Stripe</button>
       <!-- Display error message to your customers here -->
     </div>
   </form>
+  
   <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
   <div style="margin: auto; width: 30%">
     <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank"

@@ -5,7 +5,7 @@ from paypalcheckoutsdk.orders import OrdersGetRequest
 from rave_python import Rave
 from rave_python.rave_exceptions import TransactionVerificationError
 
-from src.silver.payment_processors import PaymentProcessorBase
+from silver.payment_processors import PaymentProcessorBase
 from silver.payment_processors.forms import GenericTransactionForm
 from silver.payment_processors.mixins import TriggeredProcessorMixin
 from .models import FlutterWavePaymentMethod
@@ -42,16 +42,19 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
 
         FlutterWaveTriggeredBase._has_been_setup = True
 
-    def refund_transaction(self, transaction, payment_method=None):
+    
+    def refund_transaction(self,transaction, payment_method=None):
         raise NotImplementedError()
 
-    def void_transaction(self, transaction, payment_method=None):
+    
+    def void_transaction(self,transaction, payment_method=None):
         raise NotImplementedError()
 
     @staticmethod
     def charge_payment(transaction, payment_method=None):
         raise ValueError(transaction)
 
+    
     def manage_payment(self, transaction, payment_method=None):
         raise NotImplementedError()
 
@@ -82,10 +85,11 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             elif payment_processor == "stripe":
                 payment_intent = request.GET.get("payment_intent")
                 payment_intent_client_secret = request.GET.get(
-                    "payment_intent_client_secret"
+                    "pk_test_51Kt455AVsErfOrz5rWoozmVZer7znsE4lbAliRNIgYRT8E7e3q0PDFjblX4dD6reWegif33Kdq5jTvIfXcQV6OUn006qgv1U9b"
                 )
 
-                stripe.api_key = settings.STRIPE_SECRET_KEY
+                stripe.api_key = "sk_test_51Kt455AVsErfOrz55mgK3KAoDEchHD1N3sREGSV3lK7vyJ0E5WQc5m14h0lZxBb6IffGYXBl2uGhwJugSzu5LjNY00OWBuPk4M"
+                # stripe.api_key= "pk_test_51Kt455AVsErfOrz5rWoozmVZer7znsE4lbAliRNIgYRT8E7e3q0PDFjblX4dD6reWegif33Kdq5jTvIfXcQV6OUn006qgv1U9b"
                 verify_transaction = stripe.PaymentIntent.retrieve(
                     payment_intent, payment_intent_client_secret
                 )
