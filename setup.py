@@ -6,7 +6,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="silver_flutterwave",
-    version="2.2.8",
+    version="2.2.9",
     description="Stripe pay",
     long_description="Stripe Payment in Olitt",
     url="",
@@ -16,7 +16,7 @@ setup(
     package_data={
        "templatetags": ['*.py'],
        "migrations":['*.py'],
-       "silver_flutterwave":['silver_flutterwave/*.html'],
+       "templates":['templates/*.html'],
         
     }
     # package_dir={"": "src"},
