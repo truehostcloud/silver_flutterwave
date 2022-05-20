@@ -16,7 +16,7 @@ setup(
     #package_data={
      #  "templates": ["templates/*.html"],
         
-    }
+    #}
     # package_dir={"": "src"},
     # packages=find_packages(where="src"),
 )
