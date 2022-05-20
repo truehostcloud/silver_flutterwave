@@ -19,7 +19,7 @@ class FlutterWaveTransactionView(GenericTransactionView):
             "currency": currency,
             "automatic_payment_methods[enabled]": True,
         }
-        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.api_key = "sk_test_51Kt455AVsErfOrz55mgK3KAoDEchHD1N3sREGSV3lK7vyJ0E5WQc5m14h0lZxBb6IffGYXBl2uGhwJugSzu5LjNY00OWBuPk4M"
         intent_response = stripe.PaymentIntent.create(**payload)
         return intent_response.get("client_secret")
 
