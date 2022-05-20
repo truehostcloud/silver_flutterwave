@@ -13,10 +13,9 @@ setup(
     author="Idah",
     packages=["silver_flutterwave"],
     include_package_data=True,
-    #package_data={
-     #  "templates": ["templates/*.html"],
-        
-    #}
+    # package_data={
+    #  "templates": ["templates/*.html"],
+    # }
     # package_dir={"": "src"},
     # packages=find_packages(where="src"),
 )
