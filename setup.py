@@ -13,5 +13,5 @@ setup(
     author="Idah",
     # package_dir={"": "src"},
     # packages=find_packages(where="src"),
-    packages=['silver_flutterwave']
+    packages=["silver_flutterwave"],
 )
