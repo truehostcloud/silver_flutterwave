@@ -11,7 +11,7 @@ setup(
     long_description="Stripe Payment in Olitt",
     url="",
     author="Idah",
-    packages=['silver_flutterwave'],
+    packages=["silver_flutterwave"],
     include_package_data=True,
     package_data={
         "templates": ["templates/*.html"],
