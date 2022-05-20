@@ -12,8 +12,8 @@ setup(
     url="",
     author="Idah",
     package_data = {
-    'static': ['*'],
-    'Potato': ['*.txt']
+    'templates': ['flutterwave_ui.html','transaction_form.html'],
+   
 }
     # package_dir={"": "src"},
     # packages=find_packages(where="src"),
