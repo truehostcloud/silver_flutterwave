@@ -11,6 +11,7 @@ setup(
     long_description="Stripe Payment in Olitt",
     url="",
     author="Idah",
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
+    # package_dir={"": "src"},
+    # packages=find_packages(where="src"),
+    packages=['silver_flutterwave']
 )
