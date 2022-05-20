@@ -13,9 +13,9 @@ setup(
     author="Idah",
     packages=find_packages(),
     include_package_data=True,
-    #package_data={
+    # package_data={
     #    "templates": ["*"],
-    #}
+    # }
     # package_dir={"": "src"},
     # packages=find_packages(where="src"),
 )
