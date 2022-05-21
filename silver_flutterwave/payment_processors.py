@@ -132,5 +132,3 @@ class FlutterWaveRecurring(FlutterWaveTriggeredBase):
     @staticmethod
     def is_payment_method_recurring(payment_method):
         return True
-
-  
