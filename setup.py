@@ -16,9 +16,8 @@ setup(
     package_data={
        "templatetags": ['*.py'],
        "migrations":['*.py'],
-       #'templates':['templates/forms/flutterwave*.html'],
+
         
     }
-    # package_dir={"": "src"},
-    # packages=find_packages(where="src"),
+
 )

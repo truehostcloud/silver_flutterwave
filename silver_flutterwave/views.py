@@ -1,6 +1,6 @@
 from silver.payment_processors import get_instance
 from silver.payment_processors.views import GenericTransactionView
-from django.conf import settings
+
 import stripe
 from money.money import Money
 from money.currency import Currency
