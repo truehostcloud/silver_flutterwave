@@ -134,10 +134,10 @@ class FlutterWaveRecurring(FlutterWaveTriggeredBase):
         return True
 
     def manage_payment(self, transaction, payment_method=None):
-        return()
+        return ()
 
     def void_transaction(self, transaction, payment_method=None):
-        return()
+        return ()
 
     def refund_transaction(self, transaction, payment_method=None):
-        return()
+        return ()
