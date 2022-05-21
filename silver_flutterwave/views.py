@@ -1,6 +1,7 @@
+from django.conf import settings
 from silver.payment_processors import get_instance
 from silver.payment_processors.views import GenericTransactionView
-
+from django.conf import settings
 import stripe
 from money.money import Money
 from money.currency import Currency
@@ -19,7 +20,7 @@ class FlutterWaveTransactionView(GenericTransactionView):
             "currency": currency,
             "automatic_payment_methods[enabled]": True,
         }
-        stripe.api_key = "sk_test_51Kt455AVsErfOrz55mgK3KAoDEchHD1N3sREGSV3lK7vyJ0E5WQc5m14h0lZxBb6IffGYXBl2uGhwJugSzu5LjNY00OWBuPk4M"
+        stripe.api_key = settings.STRIPE_SECRET_KEY
         intent_response = stripe.PaymentIntent.create(**payload)
         return intent_response.get("client_secret")
 

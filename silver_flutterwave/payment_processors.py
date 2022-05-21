@@ -85,10 +85,10 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             elif payment_processor == "stripe":
                 payment_intent = request.GET.get("payment_intent")
                 payment_intent_client_secret = request.GET.get(
-                    "pk_test_51Kt455AVsErfOrz5rWoozmVZer7znsE4lbAliRNIgYRT8E7e3q0PDFjblX4dD6reWegif33Kdq5jTvIfXcQV6OUn006qgv1U9b"
+                    "STRIPE_PUBLISHABLE_KEY"
                 )
 
-                stripe.api_key = "sk_test_51Kt455AVsErfOrz55mgK3KAoDEchHD1N3sREGSV3lK7vyJ0E5WQc5m14h0lZxBb6IffGYXBl2uGhwJugSzu5LjNY00OWBuPk4M"
+                stripe.api_key = settings.STRIPE_SECRET_KEY
 
                 verify_transaction = stripe.PaymentIntent.retrieve(
                     payment_intent, payment_intent_client_secret
