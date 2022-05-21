@@ -47,7 +47,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         raise NotImplementedError()
 
     @staticmethod
-    def void_transaction(self, transaction, payment_method=None):
+    def void_transaction(transaction, payment_method=None):
         raise NotImplementedError()
 
     @staticmethod
@@ -55,7 +55,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         raise ValueError(transaction)
 
     @staticmethod
-    def manage_payment(self, transaction, payment_method=None):
+    def manage_payment( transaction, payment_method=None):
         raise NotImplementedError()
 
     @staticmethod
