@@ -133,11 +133,4 @@ class FlutterWaveRecurring(FlutterWaveTriggeredBase):
     def is_payment_method_recurring(payment_method):
         return True
 
-    # def manage_payment(self, transaction, payment_method=None):
-    #     return()
-
-    # def void_transaction(self, transaction, payment_method=None):
-    #     return()
-
-    # def refund_transaction(self, transaction, payment_method=None):
-    #     return()
+  
