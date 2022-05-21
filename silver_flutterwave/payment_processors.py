@@ -44,11 +44,11 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
 
     @staticmethod
     def refund_transaction(transaction, payment_method=None):
-        raise NotImplementedError()
+        raise NotImplementedError(transaction)
 
     @staticmethod
     def void_transaction(transaction, payment_method=None):
-        raise NotImplementedError()
+        raise NotImplementedError(transaction)
 
     @staticmethod
     def charge_payment(transaction, payment_method=None):
@@ -56,7 +56,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
 
     @staticmethod
     def manage_payment(transaction, payment_method=None):
-        raise NotImplementedError()
+        raise NotImplementedError(transaction)
 
     @staticmethod
     def client_token(customer):
@@ -133,11 +133,11 @@ class FlutterWaveRecurring(FlutterWaveTriggeredBase):
     def is_payment_method_recurring(payment_method):
         return True
 
-    def manage_payment(self, transaction, payment_method=None):
-        return()
+    # def manage_payment(self, transaction, payment_method=None):
+    #     return()
 
-    def void_transaction(self, transaction, payment_method=None):
-        return()
+    # def void_transaction(self, transaction, payment_method=None):
+    #     return()
 
-    def refund_transaction(self, transaction, payment_method=None):
-        return()
+    # def refund_transaction(self, transaction, payment_method=None):
+    #     return()
