@@ -69,19 +69,19 @@
 </script>
 
 <script>
-  fetch("/config/", {
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  })
-    .then((result) => {
-      return result.json();
-    })
-    .then((data) => {
-      // Initialize Stripe.js
+ document.addEventListener('DOMContentLoaded', async () => {
+fetch("/config/",{
+  headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }
+} )
+.then((result) => { return result.json(); })
+.then((data) => {
 
-      stripe = Stripe(data.publicKey);
+ // Initialize Stripe.js
+
+    stripe = Stripe(data.publicKey);
 
       const options = {
         clientSecret: "{{ client_secret }}",
@@ -117,4 +117,5 @@
         });
       });
     });
+	});
 </script>
