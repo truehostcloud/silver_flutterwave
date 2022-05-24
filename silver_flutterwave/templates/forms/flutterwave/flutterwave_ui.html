@@ -3,9 +3,9 @@
 <form id="nonce-form" action="{{ payment_complete_url }}" method="POST">
   <input id="nonce-field" name="payment_method_nonce" type="hidden" />
 </form>
-{% get_settings_value FLUTTERWAVE_PUBLIC_KEY "FLUTTERWAVE_PUBLIC_KEY" %}
-{% get_settings_value STRIPE_PUBLISHABLE_KEY "STRIPE_PUBLISHABLE_KEY" %}
-{% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
+{% get_settings_value FLUTTERWAVE_PUBLIC_KEY "FLUTTERWAVE_PUBLIC_KEY" %} {%
+get_settings_value STRIPE_PUBLISHABLE_KEY "STRIPE_PUBLISHABLE_KEY" %} {%
+get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
 
 <script>
@@ -72,17 +72,19 @@
 </script>
 
 <script>
-  function stripePayment() {
-
-  }
+  function stripePayment() {}
 
   function toggleStripePayment() {
     const stripe_payment_form = document.getElementById("stripe-payment-form");
     // toggle form visibility
-    stripe_payment_form.style.display = stripe_payment_form.style.display === "none" ? "block" : "none";
-    const stripe_toggle_button = document.getElementById("toggle-stripe-payment");
+    stripe_payment_form.style.display =
+      stripe_payment_form.style.display === "none" ? "block" : "none";
+    const stripe_toggle_button = document.getElementById(
+      "toggle-stripe-payment"
+    );
     // toggle button visibility
-    stripe_toggle_button.style.display = stripe_toggle_button.style.display === "none" ? "block" : "none";
+    stripe_toggle_button.style.display =
+      stripe_toggle_button.style.display === "none" ? "block" : "none";
 
     // initialize stripe once form is visible
 
@@ -94,7 +96,7 @@
       // Fully customizable with appearance API.
       appearance: {
         /*...*/
-      }
+      },
     };
 
     // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 2
@@ -114,10 +116,10 @@
           payment_method_data: {
             billing_details: {
               name: "",
-              email: ""
-            }
-          }
-        }
+              email: "",
+            },
+          },
+        },
       });
     });
   }
