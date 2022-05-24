@@ -69,19 +69,19 @@
 </script>
 
 <script>
- 
-fetch("/config/",{
-  headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       }
-} )
-.then((result) => { return result.json(); })
-.then((data) => {
+  fetch("/config/", {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then((result) => {
+      return result.json();
+    })
+    .then((data) => {
+      // Initialize Stripe.js
 
- // Initialize Stripe.js
-
-    stripe = Stripe(data.publicKey);
+      stripe = Stripe(data.publicKey);
 
       const options = {
         clientSecret: "{{ client_secret }}",
