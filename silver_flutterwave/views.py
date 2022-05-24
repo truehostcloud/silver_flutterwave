@@ -10,7 +10,7 @@ from money.money import Money
 from money.currency import Currency
 
 
-import os
+
 
 @csrf_exempt
 def stripe_config(request):
@@ -18,8 +18,6 @@ def stripe_config(request):
         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
         return JsonResponse(stripe_config, safe=False)
 
-# def stripe_config(request):
-#          return request({'publishableKey': os.getenv('STRIPE_PUBLISHABLE_KEY')})
 
 
 
