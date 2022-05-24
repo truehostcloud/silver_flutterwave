@@ -10,19 +10,14 @@ from money.money import Money
 from money.currency import Currency
 
 
-
-
 @csrf_exempt
 def stripe_config(request):
-    if request.method == 'GET':
-        stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
+    if request.method == "GET":
+        stripe_config = {"publicKey": settings.STRIPE_PUBLISHABLE_KEY}
         return JsonResponse(stripe_config, safe=False)
 
 
-
-
 class FlutterWaveTransactionView(GenericTransactionView):
-
     @staticmethod
     def get_stripe_client_secret(transaction):
         """Get the Stripe client secret for the transaction."""
