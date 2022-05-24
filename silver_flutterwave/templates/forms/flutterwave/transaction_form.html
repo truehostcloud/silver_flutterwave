@@ -5,6 +5,7 @@
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
 <script src="https://js.stripe.com/v3/"></script>
 
+
 {% endblock %} {% block form %}
 <div
   style="
@@ -21,33 +22,39 @@
   </div>
 
   <div>
-    <button type="button" id="btn">Pay With Stripe</button>
-  </div>
+ <button type="button" id="btn"   >
+      Pay With Stripe
+    </button>
+  </div>   
 
-  <form style="display: none" id="payment-form">
-    <div id="payment-element"></div>
-    <div id="error-message" role="alert">
-      <button id="submitBtn" type="submit">Pay</button>
+ <form  style="display: none ; " id="payment-form"  >
+    <div   id="payment-element">
     </div>
-  </form>
+    <div id="error-message" role="alert">
+      <button id="submitBtn" type="submit">Pay </button> 
+    </div>
+  </form>   
+
 
   <script>
-    const btn = document.getElementById("btn");
+    const btn = document.getElementById('btn');
 
-    btn.addEventListener("click", () => {
-      const form = document.getElementById("payment-form");
+btn.addEventListener('click', () => {
+  const form = document.getElementById('payment-form');
 
-      if (form.style.display === "none") {
-        // 👇️ this SHOWS the form
-        form.style.display = "block";
-      } else {
-        // 👇️ this HIDES the form
-        form.style.display = "none";
-      }
-    });
+  if (form.style.display === 'none') {
+    // 👇️ this SHOWS the form
+    form.style.display = 'block';
+  } else {
+    // 👇️ this HIDES the form
+    form.style.display = 'none';
+  }
+});
   </script>
 
-  <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
+ 
+
+    <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
   <div style="margin: auto; width: 30%">
     <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank"
       >Download Invoice</a

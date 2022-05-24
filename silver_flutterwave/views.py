@@ -18,6 +18,9 @@ def stripe_config(request):
         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
         return JsonResponse(stripe_config, safe=False)
 
+
+
+
 class FlutterWaveTransactionView(GenericTransactionView):
 
     @staticmethod

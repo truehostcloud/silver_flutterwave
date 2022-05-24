@@ -6,7 +6,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="silver_flutterwave",
-    version="2.3.6",
+    version="2.3.7",
     description="Stripe pay",
     long_description="Stripe Payment in Olitt",
     url="",
