@@ -1,20 +1,10 @@
+import stripe
 from django.conf import settings
+from money.currency import Currency
+from money.money import Money
+
 from silver.payment_processors import get_instance
 from silver.payment_processors.views import GenericTransactionView
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-import stripe
-from django.http.response import JsonResponse
-from money.money import Money
-from money.currency import Currency
-
-
-@csrf_exempt
-def stripe_config(request):
-    if request.method == "GET":
-        stripe_config = {"publicKey": settings.STRIPE_PUBLISHABLE_KEY}
-        return JsonResponse(stripe_config, safe=False)
 
 
 class FlutterWaveTransactionView(GenericTransactionView):
