@@ -1,5 +1,16 @@
 version = 1
 
+exclude_patterns = [
+    "**/migrations/**",
+    "**/libs/**",
+    "**/tests/**",
+    "**/static/**",
+    "**/static_root/**",
+    "**/build/**",
+    "**/*.html",
+    "**/.eslintrc.json"
+]
+
 [[analyzers]]
 name = "python"
 enabled = true

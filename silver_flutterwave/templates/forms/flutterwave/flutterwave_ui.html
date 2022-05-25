@@ -3,9 +3,9 @@
 <form id="nonce-form" action="{{ payment_complete_url }}" method="POST">
   <input id="nonce-field" name="payment_method_nonce" type="hidden" />
 </form>
-{% get_settings_value FLUTTERWAVE_PUBLIC_KEY "FLUTTERWAVE_PUBLIC_KEY" %} {%
-get_settings_value STRIPE_PUBLISHABLE_KEY "STRIPE_PUBLISHABLE_KEY" %} {%
-get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
+{% get_settings_value FLUTTERWAVE_PUBLIC_KEY "FLUTTERWAVE_PUBLIC_KEY" %}
+{% get_settings_value STRIPE_PUBLISHABLE_KEY "STRIPE_PUBLISHABLE_KEY" %}
+{% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
 
 <script>
