@@ -1,0 +1,53 @@
+{% extends 'forms/transaction_form.html' %} {% block extrahead %}
+<!-- {% load custom_tags %}  -->
+<!-- Load the flutterwave component. -->
+
+{% endblock %} {% block form %}
+<div
+  style="
+    vertical-align: middle;
+    text-align: center;
+    margin: auto;
+    align: center;
+  "
+>
+  <div style="margin: auto">
+    <button type="button" style="width: 30%" onClick="makePayment()">
+      Pay Via Mobile Money
+    </button>
+  </div>
+
+  <div>
+    <button
+      type="button"
+      onclick="toggleStripePayment()"
+      id="toggle-stripe-payment"
+    >
+      Pay With Stripe
+    </button>
+  </div>
+
+  <form style="display: none" id="stripe-payment-form">
+    <div id="stripe-payment-element"></div>
+    <div id="error-message" role="alert">
+      <button type="submit">Complete Payment</button>
+    </div>
+  </form>
+
+  <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
+  <div style="margin: auto; width: 30%">
+    <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank"
+      >Download Invoice</a
+    >
+  </div>
+</div>
+<!-- Configuration options:
+          data-color: "blue", "gold", "silver"
+          data-size: "tiny", "small", "medium"
+          data-shape: "pill", "rect"
+          data-button_disabled: "false", "true"
+          data-button_type: "submit", "button"
+        --->
+{% include "forms/flutterwave/flutterwave_ui.html" %} {% endblock %} {% block
+transaction %} {{ block.super }} {{ payment_method.data.details }} {% endblock
+%} {{ block.document_details }}
