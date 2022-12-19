@@ -1,53 +1,390 @@
-{% extends 'forms/transaction_form.html' %} {% block extrahead %}
+{% extends 'forms/transaction_form.html' %}
+{% load static %}
+ {% block extrahead %}
 <!-- {% load custom_tags %}  -->
 <!-- Load the flutterwave component. -->
+{% endblock %}
+{% block document%}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href={% static "css/style.css" %}>
+    <div class="container">
+      <div style="margin-top: 30px;">
+          <h1 class="text-center">You’re almost there! Complete your order</h1>
+      </div>
+    
+      <section class="py-1 header">
+        <div class="container-fluid py-1">
+          <h5 class="mb-2"><b>1. Select Payment</b></h5>
+          <div class="row">
+            <div class="col-lg-3 col-md-12">
+              <!-- Tabs nav -->
+              <div class="nav flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                      <a class="nav-link mb-2 p-3 shadow-sm active" id="v-pills-mpesa-tab" data-toggle="pill" href="#v-pills-mpesa" role="tab" aria-controls="v-pills-mpesa" aria-selected="true">
+                          <span class="font-weight-bold">M-Pesa</span>
+                          <img style="float: right;" src={% static "img\mpesa.png" %} width="65px" height="30px">
+                        </a>
+                        <a class="nav-link mb-2 p-3 shadow-sm" id="v-pills-flutterwave-tab" data-toggle="pill" href="#v-pills-flutterwave" role="tab" aria-controls="v-pills-flutterwave" aria-selected="false">
+                            <span class="font-weight-bold">Flutterwave</span>
+                            <img style="float: right;" src={% static "img\debit-cards.png" %} width="50px" height="40px">
+                        </a>
+                        <a class="nav-link mb-2 p-3 shadow-sm" id="v-pills-stripe-tab" onclick="initStripePayment()" data-toggle="pill" href="#v-pills-stripe" role="tab" aria-controls="v-pills-stripe" aria-selected="false">
+                            <span class="font-weight-bold">Stripe</span>
+                            <img style="float: right;" src={% static "img\stripe.png" %} width="70px" height="29px">
+                        </a>
+                        <a class="nav-link mb-2 p-3 shadow-sm" id="v-pills-paypal-tab" onclick="initPaypalPayment()" data-toggle="pill" href="#v-pills-paypal" role="tab" aria-controls="v-pills-paypal" aria-selected="false">
+                          <span class="font-weight-bold">PayPal</span>
+                          <img style="float: right;" src={% static "img\paypal.png" %} width="100px" height="25px">
+                        </a>
+                        <a class="nav-link mb-2 p-3 shadow-sm " id="v-pills-visa-tab" data-toggle="pill" href="#v-pills-visa" role="tab" aria-controls="v-pills-visa" aria-selected="false">
+                            <span class="font-weight-bold">Credit Cards</span>
+                            <img style="float: right;" src={% static "img\visa.png" %} width="100px" height="25px">
+                        </a>
+                    </div>
+                </div>
 
-{% endblock %} {% block form %}
-<div
-  style="
-    vertical-align: middle;
-    text-align: center;
-    margin: auto;
-    align: center;
-  "
->
-  <div style="margin: auto">
-    <button type="button" style="width: 30%" onClick="makePayment()">
-      Pay Via Mobile Money
-    </button>
-  </div>
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <!-- Tabs content -->
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-visa" role="tabpanel" aria-labelledby="v-pills-visa-tab">
+                          {% block document_details_visa %}
+                            <section class="payment-form">
+                              <div class="products">
+                                {% for entry in entries %}
+                                  <h3 class="title">
+                                      <div class="item">
+                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
+                                          <p class="item-name">{{ entry.description }}</p>
+                                      </div>
+                                  </h3>
+                                  <div class="item">
+                                      <span class="price">{{ document.currency}}0.00</span>
+                                      <p class="item-name">Plan Discount</p>
+                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                  </div>
+                                  <div class="item">
+                                      <span class="price"> {{ document.currency}} 0.00</span>
+                                      <p class="item-name">Taxes & Fees</p>
+                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                  </div>
+                                {% endfor%}
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <br>
+                                <p>Have a coupon code?</p>
+                                <div class="row mb-2">
+                                    <div class="col-sm-7 mb-2">
+                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                                    </div>
+                                    <div class="col-sm-5 mb-2">
+                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-2">
+                                    <div class="col-sm-6 mb-2">
+                                      <input type="text" class="form-control" placeholder="Name of card">
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                      <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-6 mb-2">
+                                      <input type="text" class="form-control" placeholder="MM/YY">
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                      <input type="text" class="form-control" placeholder="CVC code">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-5">
+                                  {% if transaction.state == transaction.States.Initial %}
+                                    {% block form_visa %}
+                                        <div>
+                                          <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="bi bi-shield-check"></i> Pay Now</button>
+                                        </div>
+                                    {% endblock %}
+                                  {% else %}
+                                      {% block transaction_visa %}
+                                          <strong> The payment is {{ transaction.state }}.</strong>
+                                      {% endblock %}
+                                  {% endif %}
+                                </div>
+                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
+                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
+                                    payments at any time.
+                                </p>
+                              </div>
+                            </section>
+                          {% endblock %}
+                        </div>
+                        <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-paypal" role="tabpanel" aria-labelledby="v-pills-paypal-tab">
+                          {% block document_details_paypal %}
+                            <section class="payment-form">
+                              <div class="products">
+                                {% for entry in entries %}
+                                  <h3 class="title">
+                                      <div class="item">
+                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
+                                          <p class="item-name">{{ entry.description }}</p>
+                                      </div>
+                                  </h3>
+                                  <div class="item">
+                                      <span class="price">{{ document.currency}}0.00</span>
+                                      <p class="item-name">Plan Discount</p>
+                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                  </div>
+                                  <div class="item">
+                                      <span class="price"> {{ document.currency}} 0.00</span>
+                                      <p class="item-name">Taxes & Fees</p>
+                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                  </div>
+                                {% endfor%}
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <br>
+                                <p>Have a coupon code?</p>
+                                <div class="row mb-2">
+                                    <div class="col-sm-7 mb-2">
+                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                                    </div>
+                                    <div class="col-sm-5 mb-2">
+                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-5">
+                                  {% if transaction.state == transaction.States.Initial %}
+                                    {% block form_paypal %}
+                                        <div>
+                                          <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
+                                        </div>
+                                    {% endblock %}
+                                  {% else %}
+                                      {% block transaction_paypal %}
+                                      <div></div>
+                                      {% endblock %}
+                                  {% endif %}
+                                </div>
+                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
+                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
+                                    payments at any time.
+                                </p>
+                              </div>
+                            </section>
+                          {% endblock %}
+                        </div>       
+                        <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-stripe" role="tabpanel" aria-labelledby="v-pills-stripe-tab">
+                          {% block document_details_stripe %}
+                            <section class="payment-form">
+                              <div class="products">
+                                {% for entry in entries %}
+                                  <h3 class="title">
+                                      <div class="item">
+                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
+                                          <p class="item-name">{{ entry.description }}</p>
+                                      </div>
+                                  </h3>
+                                  <div class="item">
+                                      <span class="price">{{ document.currency}}0.00</span>
+                                      <p class="item-name">Plan Discount</p>
+                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                  </div>
+                                  <div class="item">
+                                      <span class="price"> {{ document.currency}} 0.00</span>
+                                      <p class="item-name">Taxes & Fees</p>
+                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                  </div>
+                                {% endfor%}
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <br>
+                                <p>Have a coupon code?</p>
+                                <div class="row mb-2">
+                                    <div class="col-sm-7 mb-2">
+                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                                    </div>
+                                    <div class="col-sm-5 mb-2">
+                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-5">
+                                  {% if transaction.state == transaction.States.Initial %}
+                                    {% block form_stripe %}
+                                        <div>
+                                            <form id="stripe-payment-form">
+                                              <div id="stripe-payment-element"></div>
+                                              <div id="error-message" role="alert">
+                                                <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="bi bi-shield-check"></i>Pay Now</button>
+                                              </div>
+                                            </form>
+                                        </div>
+                                    {% endblock %}
+                                  {% else %}
+                                      {% block transaction_stripe %}
+                                          <strong> The payment is {{ transaction.state }}.</strong>
+                                      {% endblock %}
+                                  {% endif %}
+                                </div>
+                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
+                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
+                                    payments at any time.
+                                </p>
+                              </div>
+                            </section>
+                          {% endblock %}
+                        </div>
+                        <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-flutterwave" role="tabpanel" aria-labelledby="v-pills-flutterwave-tab">
+                          {% block document_details_flutterwave %}
+                            <section class="payment-form">
+                              <div class="products">
+                                {% for entry in entries %}
+                                  <h3 class="title">
+                                      <div class="item">
+                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
+                                          <p class="item-name">{{ entry.description }}</p>
+                                      </div>
+                                  </h3>
+                                  <div class="item">
+                                      <span class="price">{{ document.currency}}0.00</span>
+                                      <p class="item-name">Plan Discount</p>
+                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                  </div>
+                                  <div class="item">
+                                      <span class="price"> {{ document.currency}} 0.00</span>
+                                      <p class="item-name">Taxes & Fees</p>
+                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                  </div>
+                                {% endfor%}
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <br>
+                                <p>Have a coupon code?</p>
+                                <div class="row mb-2">
+                                    <div class="col-sm-7 mb-2">
+                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                                    </div>
+                                    <div class="col-sm-5 mb-2">
+                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-5">
+                                  {% if transaction.state == transaction.States.Initial %}
+                                    {% block form_flutterwave %}
+                                        <div>
+                                          <button type="button" onclick="initFlutterwavePayment()"  class="btn btn-primary btn-lg btn-block"><i class="bi bi-shield-check"></i> Pay Now</button>
+                                        </div>
+                                    {% endblock %}
+                                  {% else %}
+                                      {% block transaction_flutterwave %}
+                                          <strong> The payment is {{ transaction.state }}.</strong>
+                                      {% endblock %}
+                                  {% endif %}
+                                </div>
+                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
+                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
+                                    payments at any time.
+                                </p>
+                              </div>
+                            </section>
+                          {% endblock %}
+                        </div>
+                        <div class="tab-pane fade shadow-sm rounded bg-white show active" id="v-pills-mpesa" role="tabpanel" aria-labelledby="v-pills-mpesa-tab">
+                          {% block document_details_mpesa %}
+                            <section class="payment-form">
+                              <div class="products">
+                                {% for entry in entries %}
+                                  <h3 class="title">
+                                      <div class="item">
+                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
+                                          <p class="item-name">{{ entry.description }}</p>
+                                      </div>
+                                  </h3>
+                                  <div class="item">
+                                      <span class="price">{{ document.currency}}0.00</span>
+                                      <p class="item-name">Plan Discount</p>
+                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                  </div>
+                                  <div class="item">
+                                      <span class="price"> {{ document.currency}} 0.00</span>
+                                      <p class="item-name">Taxes & Fees</p>
+                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                  </div>
+                                {% endfor%}
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <br>
+                                <p>Have a coupon code?</p>
+                                <div class="row mb-2">
+                                    <div class="col-sm-7 mb-2">
+                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                                    </div>
+                                    <div class="col-sm-5 mb-2">
+                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-5">
+                                  {% if transaction.state == transaction.States.Initial %}
+                                    {% block form_mpesa %}
+                                        <div>
+                                          <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="bi bi-shield-check"></i> Pay Now</button>
+                                        </div>
+                                    {% endblock %}
+                                  {% else %}
+                                      {% block transaction_mpesa %}
+                                          <strong> The payment is {{ transaction.state }}.</strong>
+                                      {% endblock %}
+                                  {% endif %}
+                                </div>
+                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
+                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
+                                    payments at any time.
+                                </p>
+                              </div>
+                            </section>
+                          {% endblock %}
+                        </div>
+                    </div>
+                </div>
 
-  <div>
-    <button
-      type="button"
-      onclick="toggleStripePayment()"
-      id="toggle-stripe-payment"
-    >
-      Pay With Stripe
-    </button>
-  </div>
-
-  <form style="display: none" id="stripe-payment-form">
-    <div id="stripe-payment-element"></div>
-    <div id="error-message" role="alert">
-      <button type="submit">Complete Payment</button>
+                <div class="col-lg-3 col-md-12 ">
+                  {% comment %} {% block document_customer %} {% endcomment %}
+                    <div class="card w-100 shadow-sm" style="height: 220px;">
+                        <div class="card-body">
+                          <h5 class="card-title text-primary"><i class="bi bi-person-circle"></i> Customer Details</h5>
+                          <hr>
+                          <p class="card-text"><b>Name: </b> <span style="font-size:small">{{ current_user.first_name }} {{ current_user.last_name }}</span></p>
+                          <p class="card-text"><b>Email Address: </b> <span style="font-size:small">{{ current_user.email }}</span></p>
+                          <p class="card-text"><b>Phone Number: </b> <span style="font-size:small">+254 712 345 678</span></p>
+                        </div>
+                    </div>
+                  {% comment %} {% endblock %} {% endcomment %}
+                    <br>
+                  {% comment %} {% block document_issuer %} {% endcomment %}
+                    <div class="card w-100 shadow-sm" style="height: 300px;">
+                        <div class="card-body">
+                          <h5 class="card-title text-primary"><i class="bi bi-buildings"></i> Issuer Details</h5>
+                          <hr>
+                          <p class="card-text"><b>Organisation Name: </b> <span style="font-size:small">Jisort</span></p>
+                          <p class="card-text"><b>Email Address: </b> <span style="font-size:small">info@jisort.com</span></p>
+                          <p class="card-text"><b>Mobile Number: </b> <span style="font-size:small">+254 712 345 678</span></p>
+                          <p class="card-text"><b>Physical Address: </b> <span style="font-size:small">651 N Br Street, <br>Middletown, Delaware, 19709, <br>United States</span></p>
+                        </div>
+                    </div>
+                  {% comment %} {% endblock %} {% endcomment %}
+                </div>
+            </div>
+        </div>
+      </section>
     </div>
-  </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+  
+{% include "forms/flutterwave/flutterwave_ui.html" %} 
 
-  <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
-  <div style="margin: auto; width: 30%">
-    <a type="button" href="{{ transaction.invoice.pdf.url }}" target="_blank"
-      >Download Invoice</a
-    >
-  </div>
-</div>
-<!-- Configuration options:
-          data-color: "blue", "gold", "silver"
-          data-size: "tiny", "small", "medium"
-          data-shape: "pill", "rect"
-          data-button_disabled: "false", "true"
-          data-button_type: "submit", "button"
-        --->
-{% include "forms/flutterwave/flutterwave_ui.html" %} {% endblock %} {% block
-transaction %} {{ block.super }} {{ payment_method.data.details }} {% endblock
-%} {{ block.document_details }}
+{% endblock%}
+
+{% block transaction %} {{ block.super }} {{ payment_method.data.details }} {% endblock%} {{ block.document_details }}
