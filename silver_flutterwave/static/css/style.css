@@ -1,0 +1,355 @@
+body {
+	color: #000000!important;
+	background-color: #f9f9f9!important;
+	font-family: 'Roboto', sans-serif;
+}
+
+a {
+    color: #000000;
+	text-decoration: none;
+}
+
+a:hover {
+    color: #82ba00;
+	text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6, p{
+	color: #000000;
+}
+
+.form-control {
+	height: 41px;
+	background-color: #ffffff!important;
+}
+.form-control:focus {
+	background-color: #ffffff;
+}
+.form-control, .btn {        
+	border-radius: 3px;
+}
+.btn {
+    border-radius: 3px;
+}
+
+.btn-primary{
+    background-color: #82ba00;
+    border-color: #82ba00;
+    color: #ffffff;
+}
+
+.bg-primary{
+    background-color: #82ba00!important;
+    border-color: #82ba00!important;
+    color: #ffffff;
+}
+
+.btn-primary:hover{
+    background-color: #82ba00;
+    border-color: #82ba00;
+    color: #ffffff;
+}
+
+.btn-primary:focus{
+    background-color: #82ba00;
+    border-color: #82ba00;
+    color: #ffffff;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #82ba00;
+    border-color: #82ba00;
+}
+
+.fa{
+    color: #000000;
+}
+
+.fa:hover{
+    color: #000000;
+}
+
+textarea {
+	height: 150px;
+	resize: none;
+}
+
+.card{
+    height: 150px;
+    width: 200px;
+    position: relative;
+}
+input[type="radio"]{
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    position: absolute;
+    box-shadow: 7px 7px 15px rgba(2,28,53,0.08);
+    cursor: pointer;
+    outline: none;
+}
+input[type="radio"]:before{
+    content: "";
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    background-color: #f9fafd;
+    border: 1px solid #e2e6f3;
+    border-radius: 50%;
+    top: 35px;
+    right: 20px;
+}
+input[type="radio"]:after{
+    content: "";
+    position: absolute;
+    height: 13px;
+    width: 13px;
+    background-color: transparent;
+    border-radius: 50%;
+    top: 39.5px;
+    right: 24.5px;
+}
+label{
+    position: absolute;
+    margin: 20px;
+    cursor: pointer;
+}
+h5{
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    margin: 15px 0 20px 0;
+}
+h2{
+    font-size: 28px;
+}
+span{
+    font-weight: 400;
+    font-size: 18px;
+    color: #000000;
+}
+input[type="radio"]:hover{
+    transform: scale(1.05);
+}
+input[type="radio"]:checked{
+    border: 3px solid #478bfb;
+}
+input[type="radio"]:checked:after{
+    background-color: #478bfb;
+}
+.rounded-lg {
+  border-radius: 1rem !important;
+}
+
+.text-small {
+  font-size: 0.9rem !important;
+}
+
+.custom-separator {
+  width: 5rem;
+  height: 6px;
+  border-radius: 1rem;
+}
+
+.text-uppercase {
+  letter-spacing: 0.2em;
+}
+
+.or-seperator {
+    margin: 20px 0 10px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
+.or-seperator i {
+    padding: 0 10px;
+    background-color: #f7f7f7;
+    position: relative;
+    top: -11px;
+    z-index: 1;
+}
+.social-btn .btn {
+    margin: 10px 0;
+    font-size: 15px;
+    text-align: left; 
+    line-height: 24px;       
+}
+.social-btn .btn i {
+    float: left;
+    margin: 4px 15px  0 5px;
+    min-width: 15px;
+}
+
+.btn-outline-primary {
+    color: #000000!important;
+    border-color: #000000!important;
+}
+
+.btn-outline-primary:hover {
+    color: #000000!important;
+    border-color: #000000!important;
+}
+
+.btn-outline-primary:focus {
+    color: #000000!important;
+    border-color: #000000!important;
+}
+
+.nav-pills-custom .nav-link {
+    color: #aaa;
+    background-color: #fff;
+	border: 1px solid rgba(0,0,0,.125);
+    position: relative;
+}
+
+.nav-pills-custom .nav-link.active {
+    background-color: #fff;
+	border: 2px solid #82ba00;
+}
+
+
+/* Add indicator arrow for the active tab */
+@media (min-width: 992px) {
+    .nav-pills-custom .nav-link::before {
+        content: '';
+        display: block;
+        border-top: 8px solid transparent;
+        border-left: 10px solid #82ba00;
+        border-bottom: 8px solid transparent;
+        position: absolute;
+        top: 50%;
+        right: -10px;
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}
+
+.nav-pills-custom .nav-link.active::before {
+    opacity: 1;
+}
+
+.payment-form{
+	border: 1px solid rgba(0,0,0,.125);
+	padding: 20px;
+	border-radius: .25rem;
+}
+
+.payment-form .content{
+	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
+	background-color: white;
+}
+
+.payment-form .block-heading{
+    padding-top: 50px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.payment-form .block-heading p{
+	text-align: center;
+	max-width: 420px;
+	margin: auto;
+	opacity:0.7;
+}
+
+.payment-form.dark .block-heading p{
+	opacity:0.8;
+}
+
+.payment-form .title{
+	font-size: 1em;
+	border-bottom: 1px solid rgba(0,0,0,0.1);
+	margin-bottom: 0.8em;
+	font-weight: 600;
+	padding-bottom: 8px;
+}
+
+.payment-form .products .item{
+	margin-bottom:1em;
+}
+
+.payment-form .products .item-name{
+	font-weight:600;
+	font-size: 0.9em;
+}
+
+.payment-form .products .item-description{
+	font-size:0.8em;
+	opacity:0.6;
+}
+
+.payment-form .products .item p{
+	margin-bottom:0.2em;
+}
+
+.payment-form .products .price{
+	float: right;
+	font-weight: 600;
+	font-size: 0.9em;
+}
+
+.payment-form .products .total{
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	margin-top: 10px;
+	padding-top: 19px;
+	font-weight: 600;
+	line-height: 1;
+    font-size: 25px;
+}
+
+.payment-form .card-details{
+	padding: 25px 25px 15px;
+}
+
+.payment-form .card-details label{
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 15px;
+	color: #79818a;
+	text-transform: titlecase;
+}
+
+.payment-form .card-details button{
+	margin-top: 0.6em;
+	padding:12px 0;
+	font-weight: 600;
+}
+
+.payment-form .date-separator{
+ 	margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+@media (min-width: 576px) {
+	.payment-form .title {
+		font-size: 1.2em; 
+	}
+
+	.payment-form .products {
+		padding: 40px; 
+  	}
+
+	.payment-form .products .item-name {
+		font-size: 1em; 
+	}
+
+	.payment-form .products .price {
+    	font-size: 1em; 
+	}
+
+  	.payment-form .card-details {
+    	padding: 40px 40px 30px; 
+    }
+
+  	.payment-form .card-details button {
+    	margin-top: 2em; 
+    } 
+}
+
+.text-primary {
+	color: #82ba00!important;
+}
