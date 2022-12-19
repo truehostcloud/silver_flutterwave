@@ -7,9 +7,8 @@
 {% get_settings_value STRIPE_PUBLISHABLE_KEY "STRIPE_PUBLISHABLE_KEY" %}
 {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
-
 <script>
-  function makePayment() {
+  function initFlutterwavePayment() {
     let payment_complete_url = "{{ payment_complete_url }}";
 
     FlutterwaveCheckout({
@@ -33,57 +32,59 @@
       },
       onclose: function() {
         // close modal
+        window.location.reload()
       },
       customizations: {
         title: "{{ transaction.invoice.provider.name }}",
-        description: "Payment for items in cart",
+        description: "Payment for the order",
         logo: "https://s3.olitt.com/media/leta/logo.svg"
       }
     });
-  }
-</script>
-
-<script>
-  paypal.Buttons({
-    createOrder: function(data, actions) {
-      // This function sets up the details of the transaction, including the amount and line item details.
-      return actions.order.create({
-        purchase_units: [{
-          amount: {
-            currency: "{{ transaction.invoice.currency }}",
-            value: {{ transaction.invoice.total }},
-            reference_id: "{{ transaction.uuid }}",
-            custom_id: "{{ transaction.uuid }}"
-          }
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      // This function captures the funds from the transaction.
-      return actions.order.capture().then(function(_details) {
-        let payment_complete_url = "{{ payment_complete_url }}";
-        fetch(`${payment_complete_url}?payment_processor=paypal&order_id=${data.orderID}&facilitatorAccessToken=${data.facilitatorAccessToken}`)
-          .then(_response => {
-            window.location.reload();
-          });
-      });
     }
-  }).render("#paypal-button-container");
-</script>
 
-<script>
-  function toggleStripePayment() {
-    const stripe_payment_form = document.getElementById("stripe-payment-form");
-    // toggle form visibility
-    stripe_payment_form.style.display =
-      stripe_payment_form.style.display === "none" ? "block" : "none";
-    const stripe_toggle_button = document.getElementById(
-      "toggle-stripe-payment"
-    );
-    // toggle button visibility
-    stripe_toggle_button.style.display =
-      stripe_toggle_button.style.display === "none" ? "block" : "none";
+  function initPaypalPayment(){
+    document.getElementById('paypal-button-container').innerHTML = "";
+    paypal.Buttons({
+      style: {
+        shape: 'rect',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'paypal',
+        
+      },
+      createOrder: function(data, actions) {
+        // This function sets up the details of the transaction, including the amount and line item details.
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              currency: "{{ transaction.invoice.currency }}",
+              value: {{ transaction.invoice.total }},
+              reference_id: "{{ transaction.uuid }}",
+              custom_id: "{{ transaction.uuid }}"
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        // This function captures the funds from the transaction.
+        return actions.order.capture().then(function(_details) {
+          let payment_complete_url = "{{ payment_complete_url }}";
+          fetch(`${payment_complete_url}?payment_processor=paypal&order_id=${data.orderID}&facilitatorAccessToken=${data.facilitatorAccessToken}`)
+            .then(_response => {
+              // window.location.reload();
+              console.log('success')
+            });
+        });
+      },
+      onError: function(err) {
+        console.log(err);
+      }
+    }).render("#paypal-button-container");    
+    }
 
+
+  function initStripePayment() {
+    
     // initialize stripe once form is visible
 
     stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
@@ -103,10 +104,10 @@
     // Create and mount the Payment Element
     const paymentElement = elements.create("payment");
     paymentElement.mount("#stripe-payment-element");
+    const stripe_payment_form = document.getElementById("stripe-payment-form");
 
     stripe_payment_form.addEventListener("submit", async (event) => {
       event.preventDefault();
-
       stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -121,6 +122,11 @@
       });
     });
   }
+
 </script>
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
