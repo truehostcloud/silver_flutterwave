@@ -39,88 +39,12 @@
                           <span class="font-weight-bold">PayPal</span>
                           <img style="float: right;" src={% static "img\paypal.png" %} alt="paypal-icon" width="100px" height="25px">
                         </a>
-                        <a class="nav-link mb-2 p-3 shadow-sm " id="v-pills-visa-tab" data-toggle="pill" href="#v-pills-visa" role="tab" aria-controls="v-pills-visa" aria-selected="false">
-                            <span class="font-weight-bold">Credit Cards</span>
-                            <img style="float: right;" src={% static "img\visa.png" %} alt="visa-icon" width="100px" height="25px">
-                        </a>
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-12 mb-4">
                     <!-- Tabs content -->
                     <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-visa" role="tabpanel" aria-labelledby="v-pills-visa-tab">
-                          {% block document_details_visa %}
-                            <section class="payment-form">
-                              <div class="products">
-                                {% for entry in entries %}
-                                  <h3 class="title">
-                                      <div class="item">
-                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
-                                      </div>
-                                  </h3>
-                                  <div class="item">
-                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                      <p class="item-name">Unit Price</p>
-                                      <p class="item-description">Price per unit</p>
-                                  </div>
-                                  <div class="item">
-                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                      <p class="item-description">* this may not represent document's total amount</p>
-                                  </div>
-                                {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
-                                <br>
-                                <p>Have a coupon code?</p>
-                                <div class="row mb-2">
-                                    <div class="col-sm-7 mb-2">
-                                      <input type="text" class="form-control" placeholder="Coupon Code">
-                                    </div>
-                                    <div class="col-sm-5 mb-2">
-                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6 mb-2">
-                                      <input type="text" class="form-control" placeholder="Name of card">
-                                    </div>
-                                    <div class="col-sm-6 mb-2">
-                                      <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
-                                    </div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-sm-6 mb-2">
-                                      <input type="text" class="form-control" placeholder="MM/YY">
-                                    </div>
-                                    <div class="col-sm-6 mb-2">
-                                      <input type="text" class="form-control" placeholder="CVC code">
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row mb-5">
-                                  {% if transaction.state == transaction.States.Initial %}
-                                    {% block form_visa %}
-                                        <div>
-                                          <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="bi bi-shield-check"></i> Pay Now</button>
-                                        </div>
-                                    {% endblock %}
-                                  {% else %}
-                                      {% block transaction_visa %}
-                                          <strong> The payment is {{ transaction.state }}.</strong>
-                                      {% endblock %}
-                                  {% endif %}
-                                </div>
-                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
-                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
-                                    payments at any time.
-                                </p>
-                              </div>
-                            </section>
-                          {% endblock %}
-                        </div>
                         <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-paypal" role="tabpanel" aria-labelledby="v-pills-paypal-tab">
                           {% block document_details_paypal %}
                             <section class="payment-form">
