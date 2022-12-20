@@ -12,7 +12,7 @@
     <link rel="stylesheet" href={% static "css/style.css" %}>
     <div class="container">
       <div style="margin-top: 30px;">
-          <h1 class="text-center">You’re almost there! Complete your order</h1>
+          <h1 class="text-center"> Payment for {{ document.kind }} {{ document.series }}-{{ document.number }}</h1>
       </div>
     
       <section class="py-1 header">
@@ -24,23 +24,24 @@
               <div class="nav flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                       <a class="nav-link mb-2 p-3 shadow-sm active" id="v-pills-mpesa-tab" data-toggle="pill" href="#v-pills-mpesa" role="tab" aria-controls="v-pills-mpesa" aria-selected="true">
                           <span class="font-weight-bold">M-Pesa</span>
-                          <img style="float: right;" src={% static "img\mpesa.png" %} width="65px" height="30px">
+                          <img style="float: right;" src={% static "img\mpesa.png" %} width="65px" alt="mpesa-icon" height="30px">
                         </a>
                         <a class="nav-link mb-2 p-3 shadow-sm" id="v-pills-flutterwave-tab" data-toggle="pill" href="#v-pills-flutterwave" role="tab" aria-controls="v-pills-flutterwave" aria-selected="false">
                             <span class="font-weight-bold">Flutterwave</span>
-                            <img style="float: right;" src={% static "img\debit-cards.png" %} width="50px" height="40px">
-                        </a>
+                              <img style="float: right"  src={% static "img\mobile-money.png" %} alt="mobile-money-icon" width="50px" height="30px">
+                              <img style="float: right;" class ="mr-n3" src={% static "img\debit-cards.png" %} alt="debit-cards-icon" width="50px" height="40px">
+                          </a>
                         <a class="nav-link mb-2 p-3 shadow-sm" id="v-pills-stripe-tab" onclick="initStripePayment()" data-toggle="pill" href="#v-pills-stripe" role="tab" aria-controls="v-pills-stripe" aria-selected="false">
                             <span class="font-weight-bold">Stripe</span>
-                            <img style="float: right;" src={% static "img\stripe.png" %} width="70px" height="29px">
+                            <img style="float: right;" src={% static "img\stripe.png" %} alt="stripe-icon" width="70px" height="29px">
                         </a>
                         <a class="nav-link mb-2 p-3 shadow-sm" id="v-pills-paypal-tab" onclick="initPaypalPayment()" data-toggle="pill" href="#v-pills-paypal" role="tab" aria-controls="v-pills-paypal" aria-selected="false">
                           <span class="font-weight-bold">PayPal</span>
-                          <img style="float: right;" src={% static "img\paypal.png" %} width="100px" height="25px">
+                          <img style="float: right;" src={% static "img\paypal.png" %} alt="paypal-icon" width="100px" height="25px">
                         </a>
                         <a class="nav-link mb-2 p-3 shadow-sm " id="v-pills-visa-tab" data-toggle="pill" href="#v-pills-visa" role="tab" aria-controls="v-pills-visa" aria-selected="false">
                             <span class="font-weight-bold">Credit Cards</span>
-                            <img style="float: right;" src={% static "img\visa.png" %} width="100px" height="25px">
+                            <img style="float: right;" src={% static "img\visa.png" %} alt="visa-icon" width="100px" height="25px">
                         </a>
                     </div>
                 </div>
@@ -55,22 +56,22 @@
                                 {% for entry in entries %}
                                   <h3 class="title">
                                       <div class="item">
-                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
-                                          <p class="item-name">{{ entry.description }}</p>
+                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
                                       </div>
                                   </h3>
                                   <div class="item">
-                                      <span class="price">{{ document.currency}}0.00</span>
-                                      <p class="item-name">Plan Discount</p>
-                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                      <p class="item-name">Unit Price</p>
+                                      <p class="item-description">Price per unit</p>
                                   </div>
                                   <div class="item">
-                                      <span class="price"> {{ document.currency}} 0.00</span>
-                                      <p class="item-name">Taxes & Fees</p>
-                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                      <p class="item-description">* this may not represent document's total amount</p>
                                   </div>
                                 {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
                                 <br>
                                 <p>Have a coupon code?</p>
                                 <div class="row mb-2">
@@ -127,22 +128,22 @@
                                 {% for entry in entries %}
                                   <h3 class="title">
                                       <div class="item">
-                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
-                                          <p class="item-name">{{ entry.description }}</p>
+                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
                                       </div>
                                   </h3>
                                   <div class="item">
-                                      <span class="price">{{ document.currency}}0.00</span>
-                                      <p class="item-name">Plan Discount</p>
-                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                      <p class="item-name">Unit Price</p>
+                                      <p class="item-description">Price per unit</p>
                                   </div>
                                   <div class="item">
-                                      <span class="price"> {{ document.currency}} 0.00</span>
-                                      <p class="item-name">Taxes & Fees</p>
-                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                      <p class="item-description">* this may not represent document's total amount</p>
                                   </div>
                                 {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
                                 <br>
                                 <p>Have a coupon code?</p>
                                 <div class="row mb-2">
@@ -182,22 +183,22 @@
                                 {% for entry in entries %}
                                   <h3 class="title">
                                       <div class="item">
-                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
-                                          <p class="item-name">{{ entry.description }}</p>
+                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
                                       </div>
                                   </h3>
                                   <div class="item">
-                                      <span class="price">{{ document.currency}}0.00</span>
-                                      <p class="item-name">Plan Discount</p>
-                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                      <p class="item-name">Unit Price</p>
+                                      <p class="item-description">Price per unit</p>
                                   </div>
                                   <div class="item">
-                                      <span class="price"> {{ document.currency}} 0.00</span>
-                                      <p class="item-name">Taxes & Fees</p>
-                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                      <p class="item-description">* this may not represent document's total amount</p>
                                   </div>
                                 {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
                                 <br>
                                 <p>Have a coupon code?</p>
                                 <div class="row mb-2">
@@ -242,22 +243,22 @@
                                 {% for entry in entries %}
                                   <h3 class="title">
                                       <div class="item">
-                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
-                                          <p class="item-name">{{ entry.description }}</p>
+                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
                                       </div>
                                   </h3>
                                   <div class="item">
-                                      <span class="price">{{ document.currency}}0.00</span>
-                                      <p class="item-name">Plan Discount</p>
-                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                      <p class="item-name">Unit Price</p>
+                                      <p class="item-description">Price per unit</p>
                                   </div>
                                   <div class="item">
-                                      <span class="price"> {{ document.currency}} 0.00</span>
-                                      <p class="item-name">Taxes & Fees</p>
-                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                      <p class="item-description">* this may not represent document's total amount</p>
                                   </div>
                                 {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
                                 <br>
                                 <p>Have a coupon code?</p>
                                 <div class="row mb-2">
@@ -297,22 +298,22 @@
                                 {% for entry in entries %}
                                   <h3 class="title">
                                       <div class="item">
-                                          <span class="price" style="color: #000;">{{ entry.total }}</span>
-                                          <p class="item-name">{{ entry.description }}</p>
+                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
                                       </div>
                                   </h3>
                                   <div class="item">
-                                      <span class="price">{{ document.currency}}0.00</span>
-                                      <p class="item-name">Plan Discount</p>
-                                      <p class="item-description">Any discounts offered on the product plan</p>
+                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                      <p class="item-name">Unit Price</p>
+                                      <p class="item-description">Price per unit</p>
                                   </div>
                                   <div class="item">
-                                      <span class="price"> {{ document.currency}} 0.00</span>
-                                      <p class="item-name">Taxes & Fees</p>
-                                      <p class="item-description">Any taxes or fees applied to the product plan</p>
+                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                      <p class="item-description">* this may not represent document's total amount</p>
                                   </div>
                                 {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ transaction.amount }} {{ transaction.currency }}</span></div>
+                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
                                 <br>
                                 <p>Have a coupon code?</p>
                                 <div class="row mb-2">
@@ -349,30 +350,52 @@
                 </div>
 
                 <div class="col-lg-3 col-md-12 ">
-                  {% comment %} {% block document_customer %} {% endcomment %}
-                    <div class="card w-100 shadow-sm" style="height: 220px;">
+                    <div class="card w-100 shadow-sm" style="min-height: 300px;">
                         <div class="card-body">
                           <h5 class="card-title text-primary"><i class="bi bi-person-circle"></i> Customer Details</h5>
                           <hr>
-                          <p class="card-text"><b>Name: </b> <span style="font-size:small">{{ current_user.first_name }} {{ current_user.last_name }}</span></p>
-                          <p class="card-text"><b>Email Address: </b> <span style="font-size:small">{{ current_user.email }}</span></p>
-                          <p class="card-text"><b>Phone Number: </b> <span style="font-size:small">+254 712 345 678</span></p>
+                          <p class="card-text"><b>Name: </b> <span style="font-size:small">{{ customer.billing_name }}</span></p>
+                          {% if customer.sales_tax_number %}
+                            <p class="card-text"><b>Tax No: </b> <span style="font-size:small">{{ customer.sales_tax_number }}</span></p>
+                           {% endif %}
+                           <p class="card-text"><b>Address: </b> <span style="font-size:small">{{ customer.address_1 }}</span></p>
+                           {% if customer.address_2 %}
+                           <p class="card-text"><b>Address 2: </b> <span style="font-size:small">{{ customer.address_2 }}</span></p>
+                            {% endif %}
+                          <p class="card-text"><b>City: </b> <span style="font-size:small">{{ customer.city }}</span></p>
+                          {% if customer.state %}
+                          <p class="card-text"><b>State: </b> <span style="font-size:small">{{ customer.state }}</span></p>
+                          {% endif %}
+                          {% if customer.email %}
+                          <p class="card-text"><b>Email Address: </b> <span style="font-size:small">{{ customer.email }}</span></p>
+                          {% endif %}
+                          {% if customer.company %}
+                          <p class="card-text"><b>Company: </b> <span style="font-size:small">{{ customer.company }}</span></p>
+                          {% endif %}
+                          {% if customer.extra %}
+                                    {{ customer.extra|linebreaksbr }}<br />
+                          {% endif %}
                         </div>
                     </div>
-                  {% comment %} {% endblock %} {% endcomment %}
                     <br>
-                  {% comment %} {% block document_issuer %} {% endcomment %}
-                    <div class="card w-100 shadow-sm" style="height: 300px;">
+                    <div class="card w-100 shadow-sm" style="min-height: 300px;">
                         <div class="card-body">
                           <h5 class="card-title text-primary"><i class="bi bi-buildings"></i> Issuer Details</h5>
                           <hr>
-                          <p class="card-text"><b>Organisation Name: </b> <span style="font-size:small">Jisort</span></p>
-                          <p class="card-text"><b>Email Address: </b> <span style="font-size:small">info@jisort.com</span></p>
-                          <p class="card-text"><b>Mobile Number: </b> <span style="font-size:small">+254 712 345 678</span></p>
-                          <p class="card-text"><b>Physical Address: </b> <span style="font-size:small">651 N Br Street, <br>Middletown, Delaware, 19709, <br>United States</span></p>
+                          <p class="card-text"><b>Organisation Name: </b> <span style="font-size:small">{{ provider.billing_name }}</span></p>
+                          {% if provider.email %}
+                          <p class="card-text"><b>Email Address: </b> <span style="font-size:small">{{ provider.email }}</span></p>
+                          {% endif %}
+                          <p class="card-text"><b>Address: </b> <span style="font-size:small">{{ provider.address_1 }}</span></p>
+                          <p class="card-text"><b>City: </b> <span style="font-size:small">{{ provider.city }}</span></p>
+                          {% if provider.state %}
+                          <p class="card-text"><b>State: </b> <span style="font-size:small">{{ provider.state }} </span></p>
+                          {% endif %}
+                          {% if provider.extra %}
+                           {{ provider.extra|linebreaksbr }}
+                          {% endif %}
                         </div>
                     </div>
-                  {% comment %} {% endblock %} {% endcomment %}
                 </div>
             </div>
         </div>
