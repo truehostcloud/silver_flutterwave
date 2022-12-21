@@ -6,6 +6,7 @@
 {% get_settings_value FLUTTERWAVE_PUBLIC_KEY "FLUTTERWAVE_PUBLIC_KEY" %}
 {% get_settings_value STRIPE_PUBLISHABLE_KEY "STRIPE_PUBLISHABLE_KEY" %}
 {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
+{% get_settings_value SILVER_FLUTTERWAVE_BRAND_LOGO "SILVER_FLUTTERWAVE_BRAND_LOGO" %}
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
 <script>
   function initFlutterwavePayment() {
@@ -37,7 +38,7 @@
       customizations: {
         title: "{{ transaction.invoice.provider.name }}",
         description: "Payment for the order",
-        logo: "https://s3.olitt.com/media/leta/logo.svg"
+        logo: "{{SILVER_FLUTTERWAVE_BRAND_LOGO}}"
       }
     });
     }
