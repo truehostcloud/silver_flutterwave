@@ -1,73 +1,81 @@
+
+$primary-color : #82ba00;
+$text-color : #000000;
+$bg-color : #ffffff;
+
+
+
 body {
-	color: #000000!important;
-	background-color: #f9f9f9!important;
+	color: $text-color!important;
+	background-color: $bg-color!important;
 	font-family: 'Roboto', sans-serif;
 }
 
 a {
-    color: #000000;
+    color: $text-color;
 	text-decoration: none;
 }
 
 a:hover {
-    color: #82ba00;
+    color: $primary-color;
 	text-decoration: none;
 }
 
 h1, h2, h3, h4, h5, h6, p{
-	color: #000000;
+	color: $text-color;
 }
 
 .form-control {
 	height: 41px;
-	background-color: #ffffff!important;
+	background-color: $bg-color!important;
 }
 .form-control:focus {
-	background-color: #ffffff;
+	background-color: $bg-color;
 }
 .form-control, .btn {        
 	border-radius: 3px;
 }
+
 .btn {
     border-radius: 3px;
 }
 
 .btn-primary{
-    background-color: #82ba00;
-    border-color: #82ba00;
-    color: #ffffff;
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $bg-color;
 }
 
 .bg-primary{
-    background-color: #82ba00!important;
-    border-color: #82ba00!important;
-    color: #ffffff;
+    background-color: $primary-color!important;
+    border-color: $primary-color!important;
+    color: $bg-color;
 }
 
 .btn-primary:hover{
-    background-color: #82ba00;
-    border-color: #82ba00;
-    color: #ffffff;
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $bg-color;
 }
 
 .btn-primary:focus{
-    background-color: #82ba00;
-    border-color: #82ba00;
-    color: #ffffff;
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $bg-color;
 }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
-    color: #fff;
-    background-color: #82ba00;
-    border-color: #82ba00;
+    color: $bg-color;
+    background-color: $primary-color;
+    border-color: $primary-color;
 }
 
 .fa{
-    color: #000000;
+    color: $text-color;
 }
 
 .fa:hover{
-    color: #000000;
+    color: $text-color;
 }
 
 textarea {
@@ -79,39 +87,6 @@ textarea {
     height: 150px;
     width: 200px;
     position: relative;
-}
-input[type="radio"]{
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: white;
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
-    position: absolute;
-    box-shadow: 7px 7px 15px rgba(2,28,53,0.08);
-    cursor: pointer;
-    outline: none;
-}
-input[type="radio"]:before{
-    content: "";
-    position: absolute;
-    height: 22px;
-    width: 22px;
-    background-color: #f9fafd;
-    border: 1px solid #e2e6f3;
-    border-radius: 50%;
-    top: 35px;
-    right: 20px;
-}
-input[type="radio"]:after{
-    content: "";
-    position: absolute;
-    height: 13px;
-    width: 13px;
-    background-color: transparent;
-    border-radius: 50%;
-    top: 39.5px;
-    right: 24.5px;
 }
 label{
     position: absolute;
@@ -130,84 +105,34 @@ h2{
 span{
     font-weight: 400;
     font-size: 18px;
-    color: #000000;
-}
-input[type="radio"]:hover{
-    transform: scale(1.05);
-}
-input[type="radio"]:checked{
-    border: 3px solid #478bfb;
-}
-input[type="radio"]:checked:after{
-    background-color: #478bfb;
-}
-.rounded-lg {
-  border-radius: 1rem !important;
-}
-
-.text-small {
-  font-size: 0.9rem !important;
-}
-
-.custom-separator {
-  width: 5rem;
-  height: 6px;
-  border-radius: 1rem;
-}
-
-.text-uppercase {
-  letter-spacing: 0.2em;
-}
-
-.or-seperator {
-    margin: 20px 0 10px;
-    text-align: center;
-    border-top: 1px solid #ccc;
-}
-.or-seperator i {
-    padding: 0 10px;
-    background-color: #f7f7f7;
-    position: relative;
-    top: -11px;
-    z-index: 1;
-}
-.social-btn .btn {
-    margin: 10px 0;
-    font-size: 15px;
-    text-align: left; 
-    line-height: 24px;       
-}
-.social-btn .btn i {
-    float: left;
-    margin: 4px 15px  0 5px;
-    min-width: 15px;
+    color: $text-color;
 }
 
 .btn-outline-primary {
-    color: #000000!important;
-    border-color: #000000!important;
+    color: $text-color!important;
+    border-color: $text-color!important;
 }
 
 .btn-outline-primary:hover {
-    color: #000000!important;
-    border-color: #000000!important;
+    color: $text-color!important;
+    border-color: $text-color!important;
 }
 
 .btn-outline-primary:focus {
-    color: #000000!important;
-    border-color: #000000!important;
+    color: $text-color!important;
+    border-color: $text-color!important;
 }
 
 .nav-pills-custom .nav-link {
     color: #aaa;
-    background-color: #fff;
-	border: 1px solid rgba(0,0,0,.125);
+    background-color: $bg-color;
+	border: 1px solid solid rgba(0,0,0,.125);
     position: relative;
 }
 
 .nav-pills-custom .nav-link.active {
-    background-color: #fff;
-	border: 2px solid #82ba00;
+    background-color: $bg-color;
+	border: 2px solid $primary-color;
 }
 
 
@@ -217,7 +142,7 @@ input[type="radio"]:checked:after{
         content: '';
         display: block;
         border-top: 8px solid transparent;
-        border-left: 10px solid #82ba00;
+        border-left: 10px solid $primary-color;
         border-bottom: 8px solid transparent;
         position: absolute;
         top: 50%;
@@ -239,7 +164,7 @@ input[type="radio"]:checked:after{
 
 .payment-form .content{
 	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
-	background-color: white;
+	background-color: $bg-color;
 }
 
 .payment-form .block-heading{
@@ -292,7 +217,7 @@ input[type="radio"]:checked:after{
 }
 
 .payment-form .products .total{
-	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-top: 1px solid $text-color;
 	margin-top: 10px;
 	padding-top: 19px;
 	font-weight: 600;
@@ -300,6 +225,11 @@ input[type="radio"]:checked:after{
     font-size: 25px;
 }
 
+.or-seperator {
+    margin: 20px 0 10px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
 .payment-form .card-details{
 	padding: 25px 25px 15px;
 }
@@ -351,5 +281,5 @@ input[type="radio"]:checked:after{
 }
 
 .text-primary {
-	color: #82ba00!important;
+	color: $primary-color!important;
 }
