@@ -1,97 +1,32 @@
+$primary: #82ba00;
+$min-contrast-ratio : 2.2;
+$headings-margin-bottom: 20;
+$headings-font-weight: 600;
+$btn-border-radius: 3;
 
-$primary-color : #82ba00;
-$text-color : #000000;
-$bg-color : #ffffff;
-
-
+@import "../bootstrap/scss/functions";
+@import "../bootstrap/scss/variables";
+@import "../bootstrap/scss/mixins";
+@import "../bootstrap/scss/utilities";
+@import "../bootstrap/scss/bootstrap.scss";
 
 body {
-	color: $text-color!important;
-	background-color: $bg-color!important;
 	font-family: 'Roboto', sans-serif;
-}
-
-a {
-    color: $text-color;
-	text-decoration: none;
-}
-
-a:hover {
-    color: $primary-color;
-	text-decoration: none;
-}
-
-h1, h2, h3, h4, h5, h6, p{
-	color: $text-color;
-}
-
-.form-control {
-	height: 41px;
-	background-color: $bg-color!important;
-}
-.form-control:focus {
-	background-color: $bg-color;
-}
-.form-control, .btn {        
-	border-radius: 3px;
 }
 
 .btn {
     border-radius: 3px;
 }
 
-.btn-primary{
-    background-color: $primary-color;
-    border-color: $primary-color;
-    color: $bg-color;
-}
-
-.bg-primary{
-    background-color: $primary-color!important;
-    border-color: $primary-color!important;
-    color: $bg-color;
-}
-
-.btn-primary:hover{
-    background-color: $primary-color;
-    border-color: $primary-color;
-    color: $bg-color;
-}
-
-.btn-primary:focus{
-    background-color: $primary-color;
-    border-color: $primary-color;
-    color: $bg-color;
-}
-
-.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
-    color: $bg-color;
-    background-color: $primary-color;
-    border-color: $primary-color;
-}
-
 .fa{
-    color: $text-color;
+    color: black;
 }
 
 .fa:hover{
-    color: $text-color;
+    color: black;
 }
-
-textarea {
-	height: 150px;
-	resize: none;
-}
-
-.card{
-    height: 150px;
-    width: 200px;
-    position: relative;
-}
-label{
-    position: absolute;
-    margin: 20px;
-    cursor: pointer;
+.nav-link:hover{
+	border: 1px solid $primary;
 }
 h5{
     font-weight: 600;
@@ -105,44 +40,20 @@ h2{
 span{
     font-weight: 400;
     font-size: 18px;
-    color: $text-color;
-}
-
-.btn-outline-primary {
-    color: $text-color!important;
-    border-color: $text-color!important;
-}
-
-.btn-outline-primary:hover {
-    color: $text-color!important;
-    border-color: $text-color!important;
-}
-
-.btn-outline-primary:focus {
-    color: $text-color!important;
-    border-color: $text-color!important;
-}
-
-.nav-pills-custom .nav-link {
-    color: #aaa;
-    background-color: $bg-color;
-	border: 1px solid solid rgba(0,0,0,.125);
-    position: relative;
 }
 
 .nav-pills-custom .nav-link.active {
-    background-color: $bg-color;
-	border: 2px solid $primary-color;
+	border: 2px solid $primary;
 }
 
 
-/* Add indicator arrow for the active tab */
+// /* Add indicator arrow for the active tab */
 @media (min-width: 992px) {
     .nav-pills-custom .nav-link::before {
         content: '';
         display: block;
         border-top: 8px solid transparent;
-        border-left: 10px solid $primary-color;
+        border-left: 10px $primary;
         border-bottom: 8px solid transparent;
         position: absolute;
         top: 50%;
@@ -160,126 +71,70 @@ span{
 	border: 1px solid rgba(0,0,0,.125);
 	padding: 20px;
 	border-radius: .25rem;
-}
 
-.payment-form .content{
-	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
-	background-color: $bg-color;
-}
+	.title{
+		font-size: 1em;
+		border-bottom: 1px solid rgba(0,0,0,0.1);
+		margin-bottom: 0.8em;
+		font-weight: 600;
+		padding-bottom: 8px;
+	}
 
-.payment-form .block-heading{
-    padding-top: 50px;
-    margin-bottom: 40px;
-    text-align: center;
-}
-
-.payment-form .block-heading p{
-	text-align: center;
-	max-width: 420px;
-	margin: auto;
-	opacity:0.7;
-}
-
-.payment-form.dark .block-heading p{
-	opacity:0.8;
-}
-
-.payment-form .title{
-	font-size: 1em;
-	border-bottom: 1px solid rgba(0,0,0,0.1);
-	margin-bottom: 0.8em;
-	font-weight: 600;
-	padding-bottom: 8px;
-}
-
-.payment-form .products .item{
-	margin-bottom:1em;
-}
-
-.payment-form .products .item-name{
-	font-weight:600;
-	font-size: 0.9em;
-}
-
-.payment-form .products .item-description{
-	font-size:0.8em;
-	opacity:0.6;
-}
-
-.payment-form .products .item p{
-	margin-bottom:0.2em;
-}
-
-.payment-form .products .price{
-	float: right;
-	font-weight: 600;
-	font-size: 0.9em;
-}
-
-.payment-form .products .total{
-	border-top: 1px solid $text-color;
-	margin-top: 10px;
-	padding-top: 19px;
-	font-weight: 600;
-	line-height: 1;
-    font-size: 25px;
-}
-
-.or-seperator {
-    margin: 20px 0 10px;
-    text-align: center;
-    border-top: 1px solid #ccc;
-}
-.payment-form .card-details{
-	padding: 25px 25px 15px;
-}
-
-.payment-form .card-details label{
-	font-size: 12px;
-	font-weight: 600;
-	margin-bottom: 15px;
-	color: #79818a;
-	text-transform: titlecase;
-}
-
-.payment-form .card-details button{
-	margin-top: 0.6em;
-	padding:12px 0;
-	font-weight: 600;
-}
-
-.payment-form .date-separator{
- 	margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 5px;
+	.products {
+		.item{
+			margin-bottom:1em;
+			p{
+				margin-bottom:0.2em;
+			}
+		}
+		.item-name{
+			font-weight:600;
+			font-size: 0.9em;
+		}
+		.item-description{
+			font-size:0.8em;
+			opacity:0.6;
+		}
+		.price{
+			float: right;
+			font-weight: 600;
+			font-size: 0.9em;
+		}
+		.total{
+			border-top: 1px solid black;
+			margin-top: 10px;
+			padding-top: 19px;
+			font-weight: 600;
+			line-height: 1;
+			font-size: 25px;
+		}
+	}
 }
 
 @media (min-width: 576px) {
-	.payment-form .title {
-		font-size: 1.2em; 
+	.payment-form{
+		.title {
+			font-size: 1.5em; 
+		}
+
+		.products {
+			padding: 40px; 
+			.item-name {
+				font-size: 1.5em; 
+			}
+			 .price {
+				font-size: 1.5em; 
+			}
+		}
+
+  		.card-details {
+			padding: 40px 40px 30px; 
+			button {
+				width: 100%;
+				margin-top: 1.5em; 
+			}
+		} 
 	}
-
-	.payment-form .products {
-		padding: 40px; 
-  	}
-
-	.payment-form .products .item-name {
-		font-size: 1em; 
-	}
-
-	.payment-form .products .price {
-    	font-size: 1em; 
-	}
-
-  	.payment-form .card-details {
-    	padding: 40px 40px 30px; 
-    }
-
-  	.payment-form .card-details button {
-    	margin-top: 2em; 
-    } 
 }
 
-.text-primary {
-	color: $primary-color!important;
-}
+
