@@ -1,132 +1,20 @@
+$font-family-sans-serif: 'Roboto', sans-serif;
 $primary: #82ba00;
+$h2-font-size: 28px;
+$h5-font-size: 24px;
 $min-contrast-ratio : 2.2;
-$headings-margin-bottom: 20;
+$headings-margin-bottom: 20px;
 $headings-font-weight: 600;
-$btn-border-radius: 3;
+$btn-border-radius-lg: 3px;
+$dark-border:#e1e1e1;
+$nav-tabs-border-width: 2px;
+$nav-tabs-link-active-bg: #e1e1e1;
+$nav-tabs-link-hover-border-color: $primary;
+$nav-tabs-link-active-border-color:$primary;
+$nav-pills-link-active-border-color: $primary;
 
 @import "../bootstrap/scss/functions";
 @import "../bootstrap/scss/variables";
 @import "../bootstrap/scss/mixins";
 @import "../bootstrap/scss/utilities";
 @import "../bootstrap/scss/bootstrap.scss";
-
-body {
-	font-family: 'Roboto', sans-serif;
-	h5{
-		font-weight: 600;
-		font-size: 18px;
-		letter-spacing: 0.5px;
-		margin: 15px 0 20px 0;
-		}
-	h2{
-		font-size: 28px;
-	}
-	span{
-		font-weight: 400;
-		font-size: 18px;
-	}
-	.btn {
-		border-radius: 3px;
-	}
-
-	.fa{
-		color: black;
-		.fa:hover{
-			color: black;
-		}
-	}
-	.payment-form{
-		border: 1px solid rgba(0,0,0,.125);
-		padding: 20px;
-		border-radius: .25rem;
-		.title{
-			font-size: 24px;
-			border-bottom: 1px solid rgba(0,0,0,0.1);
-			margin-bottom: 0.8em;
-			font-weight: 600;
-			padding-bottom: 8px;
-		}
-		.products {
-			.item{
-				margin-bottom:1em;
-				p{
-					margin-bottom:0.2em;
-				}
-			}
-			.item-name{
-				font-weight:600;
-				font-size: 1.0em;
-			}
-			.item-description{
-				font-size:0.9em;
-				opacity:0.6;
-			}
-			.price{
-				float: right;
-				font-weight: 600;
-				font-size: 1.0em;
-			}
-			.total{
-				border-top: 1px solid black;
-				margin-top: 10px;
-				padding-top: 19px;
-				font-weight: 600;
-				line-height: 1;
-				font-size: 25px;
-			}
-		}
-	}
-	.nav-pills-custom{
-		.nav-link:hover{
-			border: 1px solid $primary;
-		}
-		.nav-link.active {
-			border: 2px solid $primary;
-		}
-		.nav-link.active::before {
-		opacity: 1;
-	}
-	}
-}
-
-// /* Add indicator arrow for the active tab */
-@media (min-width: 992px) {
-    .nav-pills-custom .nav-link::before {
-        content: '';
-        display: block;
-        border-top: 8px solid transparent;
-        border-left: 10px $primary;
-        border-bottom: 8px solid transparent;
-        position: absolute;
-        top: 50%;
-        right: -10px;
-        transform: translateY(-50%);
-        opacity: 0;
-    }
-}
-
-@media (min-width: 576px) {
-	.payment-form{
-		.title {
-			font-size: 1.5em; 
-		}
-
-		.products {
-			padding: 40px; 
-			.item-name {
-				font-size: 1.5em; 
-			}
-			 .price {
-				font-size: 1.5em; 
-			}
-		}
-
-  		.card-details {
-			padding: 40px 40px 30px; 
-			button {
-				width: 100%;
-				margin-top: 1.5em; 
-			}
-		} 
-	}
-}
