@@ -12,40 +12,82 @@ $btn-border-radius: 3;
 
 body {
 	font-family: 'Roboto', sans-serif;
-}
+	h5{
+		font-weight: 600;
+		font-size: 18px;
+		letter-spacing: 0.5px;
+		margin: 15px 0 20px 0;
+		}
+	h2{
+		font-size: 28px;
+	}
+	span{
+		font-weight: 400;
+		font-size: 18px;
+	}
+	.btn {
+		border-radius: 3px;
+	}
 
-.btn {
-    border-radius: 3px;
+	.fa{
+		color: black;
+		.fa:hover{
+			color: black;
+		}
+	}
+	.payment-form{
+		border: 1px solid rgba(0,0,0,.125);
+		padding: 20px;
+		border-radius: .25rem;
+		.title{
+			font-size: 24px;
+			border-bottom: 1px solid rgba(0,0,0,0.1);
+			margin-bottom: 0.8em;
+			font-weight: 600;
+			padding-bottom: 8px;
+		}
+		.products {
+			.item{
+				margin-bottom:1em;
+				p{
+					margin-bottom:0.2em;
+				}
+			}
+			.item-name{
+				font-weight:600;
+				font-size: 1.0em;
+			}
+			.item-description{
+				font-size:0.9em;
+				opacity:0.6;
+			}
+			.price{
+				float: right;
+				font-weight: 600;
+				font-size: 1.0em;
+			}
+			.total{
+				border-top: 1px solid black;
+				margin-top: 10px;
+				padding-top: 19px;
+				font-weight: 600;
+				line-height: 1;
+				font-size: 25px;
+			}
+		}
+	}
+	.nav-pills-custom{
+		.nav-link:hover{
+			border: 1px solid $primary;
+		}
+		.nav-link.active {
+			border: 2px solid $primary;
+		}
+		.nav-link.active::before {
+		opacity: 1;
+	}
+	}
 }
-
-.fa{
-    color: black;
-}
-
-.fa:hover{
-    color: black;
-}
-.nav-link:hover{
-	border: 1px solid $primary;
-}
-h5{
-    font-weight: 600;
-    font-size: 18px;
-    letter-spacing: 0.5px;
-    margin: 15px 0 20px 0;
-}
-h2{
-    font-size: 28px;
-}
-span{
-    font-weight: 400;
-    font-size: 18px;
-}
-
-.nav-pills-custom .nav-link.active {
-	border: 2px solid $primary;
-}
-
 
 // /* Add indicator arrow for the active tab */
 @media (min-width: 992px) {
@@ -61,54 +103,6 @@ span{
         transform: translateY(-50%);
         opacity: 0;
     }
-}
-
-.nav-pills-custom .nav-link.active::before {
-    opacity: 1;
-}
-
-.payment-form{
-	border: 1px solid rgba(0,0,0,.125);
-	padding: 20px;
-	border-radius: .25rem;
-
-	.title{
-		font-size: 1em;
-		border-bottom: 1px solid rgba(0,0,0,0.1);
-		margin-bottom: 0.8em;
-		font-weight: 600;
-		padding-bottom: 8px;
-	}
-
-	.products {
-		.item{
-			margin-bottom:1em;
-			p{
-				margin-bottom:0.2em;
-			}
-		}
-		.item-name{
-			font-weight:600;
-			font-size: 0.9em;
-		}
-		.item-description{
-			font-size:0.8em;
-			opacity:0.6;
-		}
-		.price{
-			float: right;
-			font-weight: 600;
-			font-size: 0.9em;
-		}
-		.total{
-			border-top: 1px solid black;
-			margin-top: 10px;
-			padding-top: 19px;
-			font-weight: 600;
-			line-height: 1;
-			font-size: 25px;
-		}
-	}
 }
 
 @media (min-width: 576px) {
@@ -136,5 +130,3 @@ span{
 		} 
 	}
 }
-
-
