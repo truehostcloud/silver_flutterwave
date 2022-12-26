@@ -8,7 +8,7 @@
 {% endblock %}
 {% block document%}
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-  {% compress css %}
+    {% compress css %}
     <link type="text/x-scss" href="{% static 'css/style.scss' %}" rel="stylesheet" media="screen">
     {% endcompress %}
     <div class="container">
@@ -18,26 +18,26 @@
     
       <section class="py-1 header">
         <div class="container-fluid py-1">
-          <h5 class="mb-2"><b>1. Select Payment</b></h5>
+          <h5>1. Select Payment:</h5>
           <div class="row">
             <div class="col-lg-3 col-md-12">
               <!-- Tabs nav -->
-              <div class="nav flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical"> 
-                  <a class="nav-link mb-2 p-3 shadow-sm active bg-white fw-normal text-dark" id="v-pills-mpesa-tab" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-mpesa" role="tab" aria-controls="v-pills-mpesa" aria-selected="true">
-                      <span class="font-weight-bold">M-Pesa</span>
+              <div class="nav flex-column nav-tabs nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical"> 
+                  <a class="nav-link mb-2 p-3 shadow-sm text-dark active" id="v-pills-mpesa-tab" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-mpesa" role="tab" aria-controls="v-pills-mpesa" aria-selected="true">
+                      <span class="fw-bold fs-2 font-monospace">M-Pesa</span>
                       <img style="float: right;" src={% static "img\mpesa.png" %} width="65px" alt="mpesa-icon" height="30px">
                   </a>
-                  <a class="nav-link mb-2 p-3 shadow-sm bg-white text-dark" id="v-pills-flutterwave-tab" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-flutterwave" role="tab" aria-controls="v-pills-flutterwave" aria-selected="false">
-                      <span class="font-weight-bold">Flutterwave</span>
+                  <a class="nav-link mb-2 p-3 shadow-sm  text-dark" id="v-pills-flutterwave-tab" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-flutterwave" role="tab" aria-controls="v-pills-flutterwave" aria-selected="false">
+                      <span class="fw-bold fs-2 font-monospace">Flutterwave</span>
                       <img style="float: right"  src={% static "img\mobile-money.png" %} alt="mobile-money-icon" width="50px" height="30px">
                       <img style="float: right;" class ="mr-n3" src={% static "img\debit-cards.png" %} alt="debit-cards-icon" width="50px" height="40px">
                   </a>
-                  <a class="nav-link mb-2 p-3 shadow-sm bg-white text-dark" id="v-pills-stripe-tab" onclick="initStripePayment()" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-stripe" role="tab" aria-controls="v-pills-stripe" aria-selected="false">
-                      <span class="font-weight-bold">Stripe</span>
+                  <a class="nav-link mb-2 p-3 shadow-sm  text-dark" id="v-pills-stripe-tab" onclick="initStripePayment()" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-stripe" role="tab" aria-controls="v-pills-stripe" aria-selected="false">
+                      <span class="fw-bold fs-2 font-monospace">Stripe</span>
                       <img style="float: right;" src={% static "img\stripe.png" %} alt="stripe-icon" width="70px" height="29px">
                   </a>
-                  <a class="nav-link mb-2 p-3 shadow-sm bg-white text-dark" id="v-pills-paypal-tab" onclick="initPaypalPayment()" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-paypal" role="tab" aria-controls="v-pills-paypal" aria-selected="false">
-                    <span class="font-weight-bold">PayPal</span>
+                  <a class="nav-link mb-2 p-3 shadow-sm  text-dark" id="v-pills-paypal-tab" onclick="initPaypalPayment()" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-paypal" role="tab" aria-controls="v-pills-paypal" aria-selected="false">
+                    <span class="fw-bold fs-2 font-monospace">PayPal</span>
                     <img style="float: right;" src={% static "img\paypal.png" %} alt="paypal-icon" width="100px" height="25px">
                   </a>
                 </div>
@@ -48,38 +48,38 @@
                     <div class="tab-content" id="v-pills-tabContent">
                         <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-paypal" role="tabpanel" aria-labelledby="v-pills-paypal-tab">
                           {% block document_details_paypal %}
-                            <section class="payment-form">
-                              <div class="products">
-                                {% for entry in entries %}
-                                  <h3 class="title">
-                                      <div class="item">
-                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
-                                      </div>
-                                  </h3>
-                                  <div class="item">
-                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                      <p class="item-name">Unit Price</p>
-                                      <p class="item-description">Price per unit</p>
-                                  </div>
-                                  <div class="item">
-                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                      <p class="item-description">* this may not represent document's total amount</p>
-                                  </div>
-                                {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
-                                <br>
-                                <p>Have a coupon code?</p>
-                                <div class="row mb-2">
-                                    <div class="col-sm-7 mb-2">
-                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                          <section class="payment-form border  rounded-1">
+                            <div class="products p-5">
+                              {% for entry in entries %}
+                                <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
+                                    <div class="item mb-2">
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                        <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
-                                    <div class="col-sm-5 mb-2">
-                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
-                                    </div>
+                                </h3>
+                                <div class="item mb-3">
+                                    <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                    <p class="item-name fs-4 mb-1">Unit Price</p>
+                                    <p class="item-description fs-6 mb-1">Price per unit</p>
                                 </div>
-                                <hr>
+                                <div class="item mb-3">
+                                    <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                    <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                    <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
+                                </div>
+                              {% endfor%}
+                              <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
+                              <br>
+                              <p>Have a coupon code?</p>
+                              <div class="row mb-2">
+                                  <div class="col-sm-7 mb-2">
+                                    <input type="text" class="form-control" placeholder="Coupon Code">
+                                  </div>
+                                  <div class="col-sm-5 mb-2">
+                                      <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                  </div>
+                              </div>
+                              <hr>
                                 <div class="row mb-5">
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_paypal %}
@@ -103,38 +103,38 @@
                         </div>       
                         <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-stripe" role="tabpanel" aria-labelledby="v-pills-stripe-tab">
                           {% block document_details_stripe %}
-                            <section class="payment-form">
-                              <div class="products">
-                                {% for entry in entries %}
-                                  <h3 class="title">
-                                      <div class="item">
-                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
-                                      </div>
-                                  </h3>
-                                  <div class="item">
-                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                      <p class="item-name">Unit Price</p>
-                                      <p class="item-description">Price per unit</p>
-                                  </div>
-                                  <div class="item">
-                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                      <p class="item-description">* this may not represent document's total amount</p>
-                                  </div>
-                                {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
-                                <br>
-                                <p>Have a coupon code?</p>
-                                <div class="row mb-2">
-                                    <div class="col-sm-7 mb-2">
-                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                          <section class="payment-form border  rounded-1">
+                            <div class="products p-5">
+                              {% for entry in entries %}
+                                <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
+                                    <div class="item mb-2">
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                        <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
-                                    <div class="col-sm-5 mb-2">
-                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
-                                    </div>
+                                </h3>
+                                <div class="item mb-3">
+                                    <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                    <p class="item-name fs-4 mb-1">Unit Price</p>
+                                    <p class="item-description fs-6 mb-1">Price per unit</p>
                                 </div>
-                                <hr>
+                                <div class="item mb-3">
+                                    <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                    <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                    <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
+                                </div>
+                              {% endfor%}
+                              <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
+                              <br>
+                              <p>Have a coupon code?</p>
+                              <div class="row mb-2">
+                                  <div class="col-sm-7 mb-2">
+                                    <input type="text" class="form-control" placeholder="Coupon Code">
+                                  </div>
+                                  <div class="col-sm-5 mb-2">
+                                      <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                  </div>
+                              </div>
+                              <hr>
                                 <div class="row mb-5">
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_stripe %}
@@ -163,38 +163,38 @@
                         </div>
                         <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-flutterwave" role="tabpanel" aria-labelledby="v-pills-flutterwave-tab">
                           {% block document_details_flutterwave %}
-                            <section class="payment-form">
-                              <div class="products">
-                                {% for entry in entries %}
-                                  <h3 class="title">
-                                      <div class="item">
-                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
-                                      </div>
-                                  </h3>
-                                  <div class="item">
-                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                      <p class="item-name">Unit Price</p>
-                                      <p class="item-description">Price per unit</p>
-                                  </div>
-                                  <div class="item">
-                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                      <p class="item-description">* this may not represent document's total amount</p>
-                                  </div>
-                                {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
-                                <br>
-                                <p>Have a coupon code?</p>
-                                <div class="row mb-2">
-                                    <div class="col-sm-7 mb-2">
-                                      <input type="text" class="form-control" placeholder="Coupon Code">
+                          <section class="payment-form border  rounded-1">
+                            <div class="products p-5">
+                              {% for entry in entries %}
+                                <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
+                                    <div class="item mb-2">
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                        <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
-                                    <div class="col-sm-5 mb-2">
-                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
-                                    </div>
+                                </h3>
+                                <div class="item mb-3">
+                                    <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                    <p class="item-name fs-4 mb-1">Unit Price</p>
+                                    <p class="item-description fs-6 mb-1">Price per unit</p>
                                 </div>
-                                <hr>
+                                <div class="item mb-3">
+                                    <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                    <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                    <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
+                                </div>
+                              {% endfor%}
+                              <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
+                              <br>
+                              <p>Have a coupon code?</p>
+                              <div class="row mb-2">
+                                  <div class="col-sm-7 mb-2">
+                                    <input type="text" class="form-control" placeholder="Coupon Code">
+                                  </div>
+                                  <div class="col-sm-5 mb-2">
+                                      <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                  </div>
+                              </div>
+                              <hr>
                                 <div class="row mb-5">
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_flutterwave %}
@@ -218,27 +218,27 @@
                         </div>
                         <div class="tab-pane fade shadow-sm rounded bg-white show active" id="v-pills-mpesa" role="tabpanel" aria-labelledby="v-pills-mpesa-tab">
                           {% block document_details_mpesa %}
-                            <section class="payment-form">
-                              <div class="products">
+                            <section class="payment-form border  rounded-1">
+                              <div class="products p-5">
                                 {% for entry in entries %}
-                                  <h3 class="title">
-                                      <div class="item">
-                                          <span class="price" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                          <p class="item-name">{{ forloop.counter }}. {{ entry.description }}</p>
+                                  <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
+                                      <div class="item mb-2">
+                                          <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
+                                          <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                       </div>
                                   </h3>
-                                  <div class="item">
-                                      <span class="price">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                      <p class="item-name">Unit Price</p>
-                                      <p class="item-description">Price per unit</p>
+                                  <div class="item mb-3">
+                                      <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                      <p class="item-name fs-4 mb-1">Unit Price</p>
+                                      <p class="item-description fs-6 mb-1">Price per unit</p>
                                   </div>
-                                  <div class="item">
-                                      <span class="price"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                      <p class="item-name">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                      <p class="item-description">* this may not represent document's total amount</p>
+                                  <div class="item mb-3">
+                                      <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
+                                      <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                      <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
                                   </div>
                                 {% endfor%}
-                                <div class="total">Total Amount<span class="price" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
+                                <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
                                 <br>
                                 <p>Have a coupon code?</p>
                                 <div class="row mb-2">
@@ -246,7 +246,7 @@
                                       <input type="text" class="form-control" placeholder="Coupon Code">
                                     </div>
                                     <div class="col-sm-5 mb-2">
-                                        <button type="submit" class="btn btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                        <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
                                     </div>
                                 </div>
                                 <hr>
@@ -330,7 +330,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-    
+
 {% include "forms/flutterwave/flutterwave_ui.html" %} 
 
 {% endblock%}
