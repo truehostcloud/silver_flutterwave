@@ -1,0 +1,20 @@
+$font-family-sans-serif: 'Roboto', sans-serif;
+$primary: #82ba00;
+$h2-font-size: 28px;
+$h5-font-size: 24px;
+$min-contrast-ratio : 2.2;
+$headings-margin-bottom: 20px;
+$headings-font-weight: 600;
+$btn-border-radius-lg: 3px;
+$dark-border:#e1e1e1;
+$nav-tabs-border-width: 2px;
+$nav-tabs-link-active-bg: #e1e1e1;
+$nav-tabs-link-hover-border-color: $primary;
+$nav-tabs-link-active-border-color:$primary;
+$nav-pills-link-active-border-color: $primary;
+
+@import "../bootstrap/scss/functions";
+@import "../bootstrap/scss/variables";
+@import "../bootstrap/scss/mixins";
+@import "../bootstrap/scss/utilities";
+@import "../bootstrap/scss/bootstrap.scss";
