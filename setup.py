@@ -16,5 +16,6 @@ setup(
     package_data={
         "templatetags": ["*.py"],
         "migrations": ["*.py"],
+        "static":["*"]
     },
 )
