@@ -3,3 +3,4 @@ include LICENSE
 include DESCRIPTION
 include README.md
 recursive-include silver_flutterwave/templates/forms/flutterwave *.html
+recursive-include silver_flutterwave/static *
