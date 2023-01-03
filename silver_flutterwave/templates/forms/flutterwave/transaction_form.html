@@ -1,6 +1,5 @@
 {% extends 'forms/transaction_form.html' %}
 {% load static%}
-{% load compress %}
 
  {% block extrahead %}
 <!-- {% load custom_tags %}  -->
@@ -8,9 +7,7 @@
 {% endblock %}
 {% block document%}
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-    {% compress css %}
-    <link type="text/x-scss" href="{% static 'silver_flutterwave/css/style.scss' %}" rel="stylesheet" media="screen">
-    {% endcompress %}
+    <link rel="stylesheet" type="text/css" href="{% static 'silver_flutterwave/css/style.css' %}">
     <div class="container">
       <div style="margin-top: 30px;">
           <h1 class="text-center"> Payment for {{ document.kind }} {{ document.series }}-{{ document.number }}</h1>
@@ -25,20 +22,20 @@
               <div class="nav flex-column nav-tabs nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical"> 
                   <a class="nav-link mb-2 p-3 shadow-sm text-dark active" id="v-pills-mpesa-tab" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-mpesa" role="tab" aria-controls="v-pills-mpesa" aria-selected="true">
                       <span class="fw-bold fs-2 font-monospace">M-Pesa</span>
-                      <img style="float: right;" src={% static "img\mpesa.png" %} width="65px" alt="mpesa-icon" height="30px">
+                      <img style="float: right;" src={% static "silver_flutterwave/img/mpesa.png" %} width="65px" alt="mpesa-icon" height="30px">
                   </a>
                   <a class="nav-link mb-2 p-3 shadow-sm  text-dark" id="v-pills-flutterwave-tab" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-flutterwave" role="tab" aria-controls="v-pills-flutterwave" aria-selected="false">
                       <span class="fw-bold fs-2 font-monospace">Flutterwave</span>
-                      <img style="float: right"  src={% static "img\mobile-money.png" %} alt="mobile-money-icon" width="50px" height="30px">
-                      <img style="float: right;" class ="mr-n3" src={% static "img\debit-cards.png" %} alt="debit-cards-icon" width="50px" height="40px">
+                      <img style="float: right"  src={% static "silver_flutterwave/img/mobile-money.png" %} alt="mobile-money-icon" width="50px" height="30px">
+                      <img style="float: right;" class ="mr-n3" src={% static "silver_flutterwave/img/debit-cards.png" %} alt="debit-cards-icon" width="50px" height="40px">
                   </a>
                   <a class="nav-link mb-2 p-3 shadow-sm  text-dark" id="v-pills-stripe-tab" onclick="initStripePayment()" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-stripe" role="tab" aria-controls="v-pills-stripe" aria-selected="false">
                       <span class="fw-bold fs-2 font-monospace">Stripe</span>
-                      <img style="float: right;" src={% static "img\stripe.png" %} alt="stripe-icon" width="70px" height="29px">
+                      <img style="float: right;" src={% static "silver_flutterwave/img/stripe.png" %} alt="stripe-icon" width="70px" height="29px">
                   </a>
                   <a class="nav-link mb-2 p-3 shadow-sm  text-dark" id="v-pills-paypal-tab" onclick="initPaypalPayment()" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-paypal" role="tab" aria-controls="v-pills-paypal" aria-selected="false">
                     <span class="fw-bold fs-2 font-monospace">PayPal</span>
-                    <img style="float: right;" src={% static "img\paypal.png" %} alt="paypal-icon" width="100px" height="25px">
+                    <img style="float: right;" src={% static "silver_flutterwave/img/paypal.png" %} alt="paypal-icon" width="100px" height="25px">
                   </a>
                 </div>
               </div>
