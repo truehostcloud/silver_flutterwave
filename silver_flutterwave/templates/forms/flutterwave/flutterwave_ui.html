@@ -186,7 +186,7 @@
           return await response.json()
           })
         .then((data) => {
-          if (parseFloat(data.debit) === parseFloat("{{ document.total }}" )){
+          if (parseFloat(data.debit) >= parseFloat("{{ document.total }}" )){
             let payment_complete_url = "{{ payment_complete_url }}";
               fetch(`${payment_complete_url}?tx_ref=${tx_ref}`)
                 .then(_response => {
