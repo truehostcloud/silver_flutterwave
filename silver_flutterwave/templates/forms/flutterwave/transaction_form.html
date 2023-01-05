@@ -50,8 +50,8 @@
                               {% for entry in entries %}
                                 <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
                                     <div class="item mb-2">
-                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                        <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
+                                        <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
                                 </h3>
                                 <div class="item mb-3">
@@ -73,7 +73,7 @@
                                     <input type="text" class="form-control" placeholder="Coupon Code">
                                   </div>
                                   <div class="col-sm-5 mb-2">
-                                      <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                      <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
                                   </div>
                               </div>
                               <hr>
@@ -81,7 +81,7 @@
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_paypal %}
                                         <div>
-                                          <div id="paypal-button-container" style="margin: auto; width: 30%"></div>
+                                          <div id="paypal-button-container" class="w-75 m-auto"></div>
                                         </div>
                                     {% endblock %}
                                   {% else %}
@@ -105,8 +105,8 @@
                               {% for entry in entries %}
                                 <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
                                     <div class="item mb-2">
-                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                        <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
+                                        <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
                                 </h3>
                                 <div class="item mb-3">
@@ -128,7 +128,7 @@
                                     <input type="text" class="form-control" placeholder="Coupon Code">
                                   </div>
                                   <div class="col-sm-5 mb-2">
-                                      <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                      <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
                                   </div>
                               </div>
                               <hr>
@@ -165,8 +165,8 @@
                               {% for entry in entries %}
                                 <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
                                     <div class="item mb-2">
-                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                        <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
+                                        <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
                                 </h3>
                                 <div class="item mb-3">
@@ -188,7 +188,7 @@
                                     <input type="text" class="form-control" placeholder="Coupon Code">
                                   </div>
                                   <div class="col-sm-5 mb-2">
-                                      <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                      <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
                                   </div>
                               </div>
                               <hr>
@@ -220,8 +220,8 @@
                                 {% for entry in entries %}
                                   <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
                                       <div class="item mb-2">
-                                          <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }}{{ entry.total }}</span>
-                                          <p class="item-name fs-4 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
+                                          <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
+                                          <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                       </div>
                                   </h3>
                                   <div class="item mb-3">
@@ -243,16 +243,35 @@
                                       <input type="text" class="form-control" placeholder="Coupon Code">
                                     </div>
                                     <div class="col-sm-5 mb-2">
-                                        <button type="submit" class="btn btn-lg btn-primary btn-block mt-3"><i class="bi bi-tags"></i> Apply Coupon Code</button>
+                                        <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
                                     </div>
                                 </div>
                                 <hr>
+                                <div class="modal fade " data-bs-backdrop="static" data-bs-keyboard="false" id="mpesa-modal" tabindex="-1">
+                                  <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                      <div class="modal-body d-flex flex-column align-items-center justify-content-center" id="message-body">
+                                        <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                                          <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <h3 class="text-center">Payment Confirmation...</h3>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" id="close-modal-button" class="btn btn-primary w-100" data-bs-dismiss="modal" disabled>Close</button>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
                                 <div class="row mb-5">
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_mpesa %}
-                                        <div>
-                                          <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="bi bi-shield-check"></i> Pay Now</button>
-                                        </div>
+                                    <form id="mpesa-form">
+                                      <label for="transaction_code">Transaction Code:</label>
+                                      <input id="transaction_code" name="transaction_code" type="text" class="form-control">
+                                      <p id="error"class="d-none w-100 text-danger">Transaction code is required</p>
+                                      <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="bi bi-shield-check"></i> Pay Now</button>
+                                    </form>
                                     {% endblock %}
                                   {% else %}
                                       {% block transaction_mpesa %}
