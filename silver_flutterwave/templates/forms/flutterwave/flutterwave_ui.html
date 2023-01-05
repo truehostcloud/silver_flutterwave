@@ -7,7 +7,7 @@
 {% get_settings_value STRIPE_PUBLISHABLE_KEY "STRIPE_PUBLISHABLE_KEY" %}
 {% get_settings_value PAYPAL_CLIENT_ID "PAYPAL_CLIENT_ID" %}
 {% get_settings_value SILVER_FLUTTERWAVE_BRAND_LOGO "SILVER_FLUTTERWAVE_BRAND_LOGO" %}
-{% get_settings_value SILVER_FLUTTERWAVE_MPESA_BUSINESS_NUMBER "SILVER_FLUTTERWAVE_MPESA_BUSINESS_NUMBER" %}
+{% get_settings_value SILVER_MPESA_TILL_NO "SILVER_MPESA_TILL_NO" %}
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
 <script>
   function initFlutterwavePayment() {
@@ -145,7 +145,7 @@
         error_element.classList.remove("d-none");
       }
       else{
-        let business_no = "{{SILVER_FLUTTERWAVE_MPESA_BUSINESS_NUMBER}}"
+        let business_no = "{{SILVER_MPESA_TILL_NO}}"
         input_element.value=""
         body.classList.add("opacity-50")
         error_element.classList.add("d-none");
