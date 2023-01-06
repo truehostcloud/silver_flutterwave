@@ -97,24 +97,28 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                     verify_transaction["error"] = False
                 else:
                     verify_transaction["error"] = payment_status
-                    
+
             elif payment_processor == "mpesa":
                 business_no = request.GET.get("business_no")
                 transaction_code = request.GET.get("transaction_code")
                 response = requests.get(
                     f"https://my.jisort.com/general_ledger/transactions_ledger/?business_no={business_no}&trans_id={transaction_code}"
-                    )
+                )
                 verify_transaction = {}
                 if response.status_code != 200:
-                    error =  response.json()
+                    error = response.json()
                     verify_transaction["error"] = error[0]
                 else:
                     mpesa_transaction_details = response.json()
-                    if float(mpesa_transaction_details["debit"]) < getattr(transaction, "amount"): 
-                        verify_transaction["error"] = "Transaction amount is less than amount invoiced"
+                    if float(mpesa_transaction_details["debit"]) < getattr(
+                        transaction, "amount"
+                    ):
+                        verify_transaction[
+                            "error"
+                        ] = "Transaction amount is less than amount invoiced"
                     else:
                         verify_transaction = mpesa_transaction_details
-                        verify_transaction ["error"] = False
+                        verify_transaction["error"] = False
             else:
                 verify_transaction = self.rave.Account.verify(tx_ref)
             transaction_data = {}
