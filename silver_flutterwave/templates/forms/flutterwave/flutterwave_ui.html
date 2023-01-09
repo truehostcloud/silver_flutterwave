@@ -130,8 +130,6 @@
     let input_element = document.getElementById("transaction_code");
     let error_element = document.getElementById("error");
     let modal = document.getElementById('mpesa-modal');
-    let message_body = document.getElementById('message-body');
-    let close_modal_button = document.getElementById("close-modal-button")
 
     let mpesa_form = document.getElementById("mpesa-form");
     mpesa_form.addEventListener("submit", async (event) => {
@@ -146,6 +144,7 @@
       }
       else{
         let business_no = "{{SILVER_MPESA_TILL_NO}}"
+        let tx_ref = "{{ transaction.uuid }}"
         input_element.value=""
         body.classList.add("opacity-50")
         error_element.classList.add("d-none");
@@ -153,118 +152,14 @@
         input_element.classList.remove("border-danger");
         var myModal = new bootstrap.Modal(modal);
         myModal.show();
-        fetch(`https://my.jisort.com/general_ledger/transactions_ledger/?business_no=${business_no}&trans_id=${transaction_code}`)
-        .then( async response => {
-          if (response.status !== 200) {
-            let [error] = await response.json()
-            let content =` <svg class="w-50 h-50" id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-7 -2 139 139">
-                      <circle class="path circle" fill="none" stroke="#dc3545" stroke-width="10" stroke-miterlimit="10" stroke-linecap="round" cx="60" cy="65.1" r="62.1" />
-                      <path class="cross-line1"
-                        stroke="#870000"
-                        stroke-width="10"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        d="M25, 34 L93, 94"
-                        >
-                      </path>
-                      <path class="cross-line2"
-                              stroke="#870000"
-                              stroke-width="10"
-                              stroke-miterlimit="10"
-                              stroke-linecap="round"
-                              d="M90, 31 L29, 97"
-                              >
-                      </path>
-                    </svg>
-                    <h3>${error}</h3> `
-            message_body.innerHTML = content
-            close_modal_button.classList.remove('btn-primary')
-            close_modal_button.classList.add('btn-danger')
-            close_modal_button.removeAttribute('disabled')
-            return 
-            }
-          return await response.json()
+        let payment_complete_url = "{{ payment_complete_url }}";
+        fetch(`${payment_complete_url}?tx_ref=${tx_ref}&payment_processor=mpesa&business_no=${business_no}&transaction_code=${transaction_code}`)
+          .then(response => {
+            console.log('success')
           })
-        .then((data) => {
-          if (parseFloat(data.debit) >= parseFloat("{{ document.total }}" )){
-            let payment_complete_url = "{{ payment_complete_url }}";
-              fetch(`${payment_complete_url}?tx_ref=${tx_ref}`)
-                .then(_response => {
-                  let content = `<svg class="w-50 h-50" id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-7 -2 139 139">
-                            <circle class="path circle" fill="none" stroke="#82ba00" stroke-width="10" stroke-miterlimit="10" stroke-linecap="round" cx="60" cy="65.1" r="62.1" />
-                            <polyline class="path check"
-                              fill="none"
-                              stroke="#82ba00"
-                              stroke-width="10"
-                              stroke-miterlimit="10"
-                              stroke-linecap="round"
-                              points="100, 40 51, 88 29, 67"
-                              />
-                              </svg>
-                              <h3>Payment Confirmed</h3>`
-                  message_body.innerHTML = content
-                  close_modal_button.removeAttribute('disabled')
-                  close_modal_button.onclick = event => window.location.reload();
-                })
-          }
-          else{
-            let error_message = "Transaction amount is less than amount invoiced"
-            let content =` <svg class="w-50 h-50" id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-7 -2 139 139">
-              <circle class="path circle" fill="none" stroke="#dc3545" stroke-width="10" stroke-miterlimit="10" stroke-linecap="round" cx="60" cy="65.1" r="62.1" />
-              <path class="cross-line1"
-                stroke="#870000"
-                stroke-width="10"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                d="M25, 34 L93, 94"
-                >
-              </path>
-              <path class="cross-line2"
-                      stroke="#870000"
-                      stroke-width="10"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      d="M90, 31 L29, 97"
-                      >
-              </path>
-              </svg>
-              <h3>${error_message}</h3> `
-            message_body.innerHTML = content
-            close_modal_button.classList.remove('btn-primary')
-            close_modal_button.classList.add('btn-danger')
-            close_modal_button.removeAttribute('disabled')
-          }
-        })
-        .catch((error) => {
-          let error_message = "Something went wrong, Try again later"
-          let content =` <svg class="w-50 h-50" id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-7 -2 139 139">
-                      <circle class="path circle" fill="none" stroke="#dc3545" stroke-width="10" stroke-miterlimit="10" stroke-linecap="round" cx="60" cy="65.1" r="62.1" />
-                      <path class="cross-line1"
-                        stroke="#870000"
-                        stroke-width="10"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        d="M25, 34 L93, 94"
-                        >
-                      </path>
-                      <path class="cross-line2"
-                              stroke="#870000"
-                              stroke-width="10"
-                              stroke-miterlimit="10"
-                              stroke-linecap="round"
-                              d="M90, 31 L29, 97"
-                              >
-                      </path>
-                    </svg>
-                    <h3>${error_message}</h3> `
-          message_body.innerHTML = content
-          close_modal_button.classList.remove('btn-primary')
-          close_modal_button.classList.add('btn-danger')
-          close_modal_button.removeAttribute('disabled')
-        });
-    }    
-  })
-  })()
+      }
+    })
+})()
 </script>
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
