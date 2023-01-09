@@ -154,9 +154,14 @@
         myModal.show();
         let payment_complete_url = "{{ payment_complete_url }}";
         fetch(`${payment_complete_url}?tx_ref=${tx_ref}&payment_processor=mpesa&business_no=${business_no}&transaction_code=${transaction_code}`)
-          .then(response => {
-            console.log('success')
-          })
+        .then(response => {
+          return response.text()
+        })
+        .then( html =>{
+          myModal.hide();
+          body.classList.add("opacity-0")
+          body.innerHTML = html
+        })
       }
     })
 })()
