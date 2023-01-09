@@ -110,9 +110,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                     verify_transaction["error"] = error[0]
                 else:
                     mpesa_transaction_details = response.json()
-                    if float(mpesa_transaction_details["debit"]) < getattr(
-                        transaction, "amount"
-                    ):
+                    if float(mpesa_transaction_details["debit"]) < transaction.amount:
                         verify_transaction[
                             "error"
                         ] = "Transaction amount is less than amount invoiced"
