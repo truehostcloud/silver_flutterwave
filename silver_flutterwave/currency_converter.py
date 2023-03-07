@@ -51,10 +51,8 @@ class CurrencyConverter:
         Convert one currency to another.
     """
 
-    CurrencyConversion = import_string(settings.SILVER_CURRENCY_CONVERSION_MODEL)()
-
-    @classmethod
-    def save_conversion(cls, from_currency, to_currency, rate):
+    @staticmethod
+    def save_conversion(from_currency, to_currency, rate):
         """
         Save the conversion rate into the database.
         Args:
@@ -62,7 +60,8 @@ class CurrencyConverter:
           to_currency: String, currency code converting to.
           rate: Decimal, currency conversion rate date.
         """
-        cls.CurrencyConversion.objects.create(
+        currency_conversion = import_string(settings.SILVER_CURRENCY_CONVERSION_MODEL)()
+        currency_conversion.objects.create(
             from_currency_code=from_currency,
             to_currency_code=to_currency,
             rate=rate,
@@ -79,9 +78,10 @@ class CurrencyConverter:
         Returns:
             Decimal, Conversion rate
         """
+        currency_conversion = import_string(settings.SILVER_CURRENCY_CONVERSION_MODEL)()
         if from_currency == to_currency:
             return 1
-        rate_filter = cls.CurrencyConversion.objects.filter(
+        rate_filter = currency_conversion.objects.filter(
             from_currency_code=from_currency, to_currency_code=to_currency
         )
         if datetime_gte:
