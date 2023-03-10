@@ -60,7 +60,7 @@ class CurrencyConverter:
           to_currency: String, currency code converting to.
           rate: Decimal, currency conversion rate date.
         """
-        currency_conversion = import_string(settings.SILVER_CURRENCY_CONVERSION_MODEL)()
+        currency_conversion = import_string(settings.SILVER_CURRENCY_CONVERSION_MODEL)
         currency_conversion.objects.create(
             from_currency_code=from_currency,
             to_currency_code=to_currency,
@@ -78,7 +78,7 @@ class CurrencyConverter:
         Returns:
             Decimal, Conversion rate
         """
-        currency_conversion = import_string(settings.SILVER_CURRENCY_CONVERSION_MODEL)()
+        currency_conversion = import_string(settings.SILVER_CURRENCY_CONVERSION_MODEL)
         if from_currency == to_currency:
             return 1
         rate_filter = currency_conversion.objects.filter(
