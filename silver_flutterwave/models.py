@@ -1,3 +1,5 @@
+from django.db import models
+
 from silver.models import PaymentMethod
 
 
@@ -38,3 +40,15 @@ class FlutterWavePaymentMethod(PaymentMethod):
     @property
     def public_data(self):
         return self.data.get("details")
+
+
+class CurrencyConversion(models.Model):
+    """
+    Model to store currency conversions fetched from remote converter.
+    Used to reduce calls to remote or as a fallback in case of unavailability of remote.
+    """
+
+    from_currency_code = models.CharField(max_length=4, null=True, blank=True)
+    to_currency_code = models.CharField(max_length=4, null=True, blank=True)
+    rate = models.FloatField(null=True, blank=True)
+    rate_date = models.DateTimeField(auto_now_add=True)
