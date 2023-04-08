@@ -52,7 +52,7 @@
         color: 'gold',
         layout: 'vertical',
         label: 'paypal',
-        
+
       },
       createOrder: function(data, actions) {
         // This function sets up the details of the transaction, including the amount and line item details.
@@ -73,20 +73,19 @@
           let payment_complete_url = "{{ payment_complete_url }}";
           fetch(`${payment_complete_url}?payment_processor=paypal&order_id=${data.orderID}&facilitatorAccessToken=${data.facilitatorAccessToken}`)
             .then(_response => {
-              // window.location.reload();
-              console.log('success')
+              window.location.reload();
             });
         });
       },
       onError: function(err) {
         console.log(err);
       }
-    }).render("#paypal-button-container");    
+    }).render("#paypal-button-container");
     }
 
 
   function initStripePayment() {
-    
+
     // initialize stripe once form is visible
 
     stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
