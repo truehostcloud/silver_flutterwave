@@ -12,14 +12,14 @@
       <div style="margin-top: 30px;">
           <h1 class="text-center"> Payment for {{ document.kind }} {{ document.series }}-{{ document.number }}</h1>
       </div>
-    
+
       <section class="py-1 header" id="payment-section">
         <div class="container-fluid py-1">
           <h5>1. Select Payment:</h5>
           <div class="row">
             <div class="col-lg-3 col-md-12">
               <!-- Tabs nav -->
-              <div class="nav flex-column nav-tabs nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical"> 
+              <div class="nav flex-column nav-tabs nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                   <a class="nav-link mb-2 p-3 shadow-sm text-dark active" id="v-pills-mpesa-tab" data-bs-toggle="pill" type="button" data-bs-target="#v-pills-mpesa" role="tab" aria-controls="v-pills-mpesa" aria-selected="true">
                       <span class="fw-bold fs-2 font-monospace">M-Pesa</span>
                       <img style="float: right;" src={% static "silver_flutterwave/img/mpesa.png" %} width="65px" alt="mpesa-icon" height="30px">
@@ -42,26 +42,23 @@
 
                 <div class="col-lg-6 col-md-12 mb-4">
                     <!-- Tabs content -->
-                    <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-paypal" role="tabpanel" aria-labelledby="v-pills-paypal-tab">
-                          {% block document_details_paypal %}
-                          <section class="payment-form border  rounded-1">
+                <section class="payment-form border  rounded-1">
                             <div class="products p-5">
                               {% for entry in entries %}
                                 <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
                                     <div class="item mb-2">
-                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ document.currency }} {{ entry.total }}</span>
                                         <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
                                 </h3>
                                 <div class="item mb-3">
-                                    <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
+                                    <span class="price fs-5 float-end mt-2">{{ document.currency}} {{ entry.unit_price|floatformat:-2}}</span>
                                     <p class="item-name fs-4 mb-1">Unit Price</p>
                                     <p class="item-description fs-6 mb-1">Price per unit</p>
                                 </div>
                                 <div class="item mb-3">
                                     <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                    <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                    <p class="item-name fs-4 mb-1">Sub Total( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
                                     <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
                                 </div>
                               {% endfor%}
@@ -77,7 +74,10 @@
                                   </div>
                               </div>
                               <hr>
-                                <div class="row mb-5">
+                            <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-paypal" role="tabpanel" aria-labelledby="v-pills-paypal-tab">
+                          {% block document_details_paypal %}
+                          <div class="row mb-5">
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_paypal %}
                                         <div>
@@ -90,49 +90,11 @@
                                       {% endblock %}
                                   {% endif %}
                                 </div>
-                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
-                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
-                                    payments at any time.
-                                </p>
-                              </div>
-                            </section>
                           {% endblock %}
-                        </div>       
+                        </div>
                         <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-stripe" role="tabpanel" aria-labelledby="v-pills-stripe-tab">
                           {% block document_details_stripe %}
-                          <section class="payment-form border  rounded-1">
-                            <div class="products p-5">
-                              {% for entry in entries %}
-                                <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
-                                    <div class="item mb-2">
-                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
-                                        <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
-                                    </div>
-                                </h3>
-                                <div class="item mb-3">
-                                    <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                    <p class="item-name fs-4 mb-1">Unit Price</p>
-                                    <p class="item-description fs-6 mb-1">Price per unit</p>
-                                </div>
-                                <div class="item mb-3">
-                                    <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                    <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                    <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
-                                </div>
-                              {% endfor%}
-                              <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
-                              <br>
-                              <p>Have a coupon code?</p>
-                              <div class="row mb-2">
-                                  <div class="col-sm-7 mb-2">
-                                    <input type="text" class="form-control" placeholder="Coupon Code">
-                                  </div>
-                                  <div class="col-sm-5 mb-2">
-                                      <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
-                                  </div>
-                              </div>
-                              <hr>
-                                <div class="row mb-5">
+                          <div class="row mb-5">
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_stripe %}
                                         <div>
@@ -150,49 +112,11 @@
                                       {% endblock %}
                                   {% endif %}
                                 </div>
-                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
-                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
-                                    payments at any time.
-                                </p>
-                              </div>
-                            </section>
                           {% endblock %}
                         </div>
                         <div class="tab-pane fade shadow-sm rounded bg-white" id="v-pills-flutterwave" role="tabpanel" aria-labelledby="v-pills-flutterwave-tab">
                           {% block document_details_flutterwave %}
-                          <section class="payment-form border  rounded-1">
-                            <div class="products p-5">
-                              {% for entry in entries %}
-                                <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
-                                    <div class="item mb-2">
-                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
-                                        <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
-                                    </div>
-                                </h3>
-                                <div class="item mb-3">
-                                    <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                    <p class="item-name fs-4 mb-1">Unit Price</p>
-                                    <p class="item-description fs-6 mb-1">Price per unit</p>
-                                </div>
-                                <div class="item mb-3">
-                                    <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                    <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                    <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
-                                </div>
-                              {% endfor%}
-                              <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
-                              <br>
-                              <p>Have a coupon code?</p>
-                              <div class="row mb-2">
-                                  <div class="col-sm-7 mb-2">
-                                    <input type="text" class="form-control" placeholder="Coupon Code">
-                                  </div>
-                                  <div class="col-sm-5 mb-2">
-                                      <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
-                                  </div>
-                              </div>
-                              <hr>
-                                <div class="row mb-5">
+                          <div class="row mb-5">
                                   {% if transaction.state == transaction.States.Initial %}
                                     {% block form_flutterwave %}
                                         <div>
@@ -205,49 +129,11 @@
                                       {% endblock %}
                                   {% endif %}
                                 </div>
-                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
-                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
-                                    payments at any time.
-                                </p>
-                              </div>
-                            </section>
                           {% endblock %}
                         </div>
                         <div class="tab-pane fade shadow-sm rounded bg-white show active" id="v-pills-mpesa" role="tabpanel" aria-labelledby="v-pills-mpesa-tab">
                           {% block document_details_mpesa %}
-                            <section class="payment-form border  rounded-1">
-                              <div class="products p-5">
-                                {% for entry in entries %}
-                                  <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
-                                      <div class="item mb-2">
-                                          <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ transaction.currency }} {{ entry.total }}</span>
-                                          <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
-                                      </div>
-                                  </h3>
-                                  <div class="item mb-3">
-                                      <span class="price fs-5 float-end mt-2">{{ document.currency}}{{ entry.unit_price|floatformat:-2}}</span>
-                                      <p class="item-name fs-4 mb-1">Unit Price</p>
-                                      <p class="item-description fs-6 mb-1">Price per unit</p>
-                                  </div>
-                                  <div class="item mb-3">
-                                      <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                      <p class="item-name fs-4 mb-1">SubTotal( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
-                                      <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
-                                  </div>
-                                {% endfor%}
-                                <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
-                                <br>
-                                <p>Have a coupon code?</p>
-                                <div class="row mb-2">
-                                    <div class="col-sm-7 mb-2">
-                                      <input type="text" class="form-control" placeholder="Coupon Code">
-                                    </div>
-                                    <div class="col-sm-5 mb-2">
-                                        <button type="submit" class="btn btn-lg btn-primary btn-block"><i class="bi bi-tags"></i> Apply Coupon Code</button>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="modal fade " data-bs-backdrop="static" data-bs-keyboard="false" id="mpesa-modal" tabindex="-1">
+                            <div class="modal fade " data-bs-backdrop="static" data-bs-keyboard="false" id="mpesa-modal" tabindex="-1">
                                   <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                       <div class="modal-body d-flex flex-column align-items-center justify-content-center" id="message-body">
@@ -276,15 +162,16 @@
                                       {% endblock %}
                                   {% endif %}
                                 </div>
-                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the 
-                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring 
-                                    payments at any time.
-                                </p>
-                              </div>
-                            </section>
                           {% endblock %}
                         </div>
                     </div>
+
+                                <p class="text-center" style="font-size: small;">By checking out you agree with our <b><a href="">Terms of Service</a></b>. We will process your personal data for the
+                                    fulfillment of your order and other purposes as per our <b><a href="">Privacy Policy</a></b>. You can cancel recurring
+                                    payments at any time.
+                                </p>
+                              </div>
+                </section>
                 </div>
 
                 <div class="col-lg-3 col-md-12 ">
@@ -339,12 +226,12 @@
         </div>
       </section>
     </div>
-    <script src="{% static 'silver_flutterwave/bootstrap-5.0.2/js/bootstrap.min.js' %}"></script>  
+    <script src="{% static 'silver_flutterwave/bootstrap-5.0.2/js/bootstrap.min.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
 
-{% include "forms/flutterwave/flutterwave_ui.html" %} 
+{% include "forms/flutterwave/flutterwave_ui.html" %}
 
 {% endblock%}
 

@@ -21,3 +21,8 @@ def do_assign(parser, token):
         raise template.TemplateSyntaxError("'%s' tag takes two arguments" % bits[0])
     value = parser.compile_filter(bits[2])
     return AssignNode(bits[1], value)
+
+
+@register.simple_tag()
+def get_customer_document_amount(document):
+    return document.amount
