@@ -47,22 +47,22 @@
                               {% for entry in entries %}
                                 <h3 class="title mb-4 pb-1 fw-bold border-bottom ">
                                     <div class="item mb-2">
-                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{{ document.currency }} {{ entry.total }}</span>
+                                        <span class="price fs-3 mb-3 float-end" style="color: #000;">{% get_user_currency document.currency %} {% convert_user_amount document.currency entry.total %}</span>
                                         <p class="item-name fs-5 mb-1">{{ forloop.counter }}. {{ entry.description }}</p>
                                     </div>
                                 </h3>
                                 <div class="item mb-3">
-                                    <span class="price fs-5 float-end mt-2">{{ document.currency}} {{ entry.unit_price|floatformat:-2}}</span>
+                                    <span class="price fs-5 float-end mt-2">{% get_user_currency document.currency %} {% convert_user_amount document.currency entry.unit_price %}</span>
                                     <p class="item-name fs-4 mb-1">Unit Price</p>
                                     <p class="item-description fs-6 mb-1">Price per unit</p>
                                 </div>
                                 <div class="item mb-3">
-                                    <span class="price fs-5 float-end mt-2"> {{ document.currency}} {{ entry.total|floatformat:2 }}</span>
-                                    <p class="item-name fs-4 mb-1">Sub Total( {{entry.quantity|floatformat:-2}} * {{entry.unit_price|floatformat:2}})</p>
+                                    <span class="price fs-5 float-end mt-2"> {% get_user_currency document.currency %} {% convert_user_amount document.currency entry.total %}</span>
+                                    <p class="item-name fs-4 mb-1">Sub Total( {{entry.quantity|floatformat:-2}} * {% convert_user_amount document.currency entry.unit_price %})</p>
                                     <p class="item-description fs-6 mb-1">* this may not represent document's total amount</p>
                                 </div>
                               {% endfor%}
-                              <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{{ document.total|floatformat:2 }} {{ document.currency }}</span></div>
+                              <div class="total border-top border-dark mt-5 pt-5 mb-3 fs-4 fw-bold">Total Amount<span class="price float-end fs-2 fw-bold" style="color: #000;">{% get_user_currency document.currency %} {% convert_user_amount document.currency document.total %}</span></div>
                               <br>
                               <p>Have a coupon code?</p>
                               <div class="row mb-2">
