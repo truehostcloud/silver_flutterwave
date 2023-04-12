@@ -149,7 +149,9 @@ class CurrencyConverter:
             except RateNotFound:
                 rate = cls.fetch_rate_from_converter(currency_converter_api_key, query)
                 if not rate:
-                    rate = cls.fallback_rate_from_converter(exchange_rate_api_key, from_currency, to_currency)
+                    rate = cls.fallback_rate_from_converter(
+                        exchange_rate_api_key, from_currency, to_currency
+                    )
                 if rate:
                     cls.save_conversion(from_currency, to_currency, rate)
                 else:

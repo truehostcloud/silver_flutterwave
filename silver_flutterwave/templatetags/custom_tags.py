@@ -40,7 +40,9 @@ def convert_user_amount(context, currency, amount):
     if customer:
         currency_converter = import_string(settings.SILVER_CURRENCY_CONVERTER)()
         user_currency = customer.currency
-        return round(currency_converter.convert(amount, currency, user_currency, None), 2)
+        return round(
+            currency_converter.convert(amount, currency, user_currency, None), 2
+        )
     return amount
 
 
