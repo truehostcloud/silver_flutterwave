@@ -21,8 +21,11 @@ class FlutterWaveTransactionView(GenericTransactionView):
             "automatic_payment_methods[enabled]": True,
         }
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        intent_response = stripe.PaymentIntent.create(**payload)
-        return intent_response.get("client_secret")
+        try:
+            intent_response = stripe.PaymentIntent.create(**payload)
+            return intent_response.get("client_secret")
+        except stripe.error.InvalidRequestError as e:
+            return e
 
     def get_context_data(self):
         context_data = super(FlutterWaveTransactionView, self).get_context_data()

@@ -5,6 +5,7 @@ import requests
 from _decimal import Decimal
 from django.conf import settings
 from django.utils.module_loading import import_string
+from django.utils.timezone import make_aware
 
 
 class RateNotFound(Exception):
@@ -111,6 +112,16 @@ class CurrencyConverter:
         except (json.decoder.JSONDecodeError, KeyError):
             return None
 
+    @staticmethod
+    def fallback_rate_from_converter(api_key, from_currency, to_currency):
+        url = f"https://v6.exchangerate-api.com/v6/{api_key}/pair/{from_currency}/{to_currency}"
+        response = requests.request("GET", url)
+        try:
+            rate = json.loads(response.text.encode("utf8"))
+            return rate["conversion_rate"]
+        except (json.decoder.JSONDecodeError, KeyError):
+            return None
+
     @classmethod
     def convert(cls, amount, from_currency, to_currency, conversion_date):
         """
@@ -123,9 +134,11 @@ class CurrencyConverter:
         Returns:
           Decimal, converted amount or conversion rate.
         """
-        api_key = settings.CURRENCY_CONVERTER_API_KEY
+        currency_converter_api_key = settings.CURRENCY_CONVERTER_API_KEY
+        exchange_rate_api_key = settings.EXCHANGE_RATE_API_KEY
+
         query = "{}_{}".format(from_currency, to_currency)
-        _24_hours_ago = datetime.now() - timedelta(hours=24)
+        _24_hours_ago = make_aware(datetime.now() - timedelta(hours=24))
         if settings.FIXED_CURRENCY_CONVERSIONS.get(query):
             rate = settings.FIXED_CURRENCY_CONVERSIONS[query]
         else:
@@ -134,7 +147,11 @@ class CurrencyConverter:
                     from_currency, to_currency, datetime_gte=_24_hours_ago
                 )
             except RateNotFound:
-                rate = cls.fetch_rate_from_converter(api_key, query)
+                rate = cls.fetch_rate_from_converter(currency_converter_api_key, query)
+                if not rate:
+                    rate = cls.fallback_rate_from_converter(
+                        exchange_rate_api_key, from_currency, to_currency
+                    )
                 if rate:
                     cls.save_conversion(from_currency, to_currency, rate)
                 else:

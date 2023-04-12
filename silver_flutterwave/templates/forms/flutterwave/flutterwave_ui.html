@@ -11,6 +11,7 @@
 <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}"></script>
 <script>
   function initFlutterwavePayment() {
+    console.log("{{ FLUTTERWAVE_PUBLIC_KEY }}")
     let payment_complete_url = "{{ payment_complete_url }}";
 
     FlutterwaveCheckout({
