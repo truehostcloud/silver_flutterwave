@@ -67,24 +67,36 @@ class Card(models.Model):
         ("eftposaustralia", "Eftpos Australia"),
         ("unknown", "Unknown"),
     )
-    name = models.CharField(max_length=255, null=True, blank=True)
+    FUNDING_CHOICES = (
+        ("credit", "Credit"),
+        ("debit", "Debit"),
+        ("prepaid", "Prepaid"),
+        ("unknown", "Unknown"),
+    )
+    display_name = models.CharField(max_length=255, null=True, blank=True)
     external_id = models.CharField(max_length=255, null=True, blank=True)
     external_name = models.CharField(max_length=255, null=True, blank=True)
     brand = models.CharField(max_length=255, null=True, blank=True, choices=BRAND_CHOICES)
     last4 = models.CharField(max_length=4, null=True, blank=True)
     exp_month = models.CharField(max_length=2, null=True, blank=True)
     exp_year = models.CharField(max_length=4, null=True, blank=True)
+    address_zip = models.CharField(max_length=255, null=True, blank=True)
+    address_city = models.CharField(max_length=255, null=True, blank=True)
+    address_state = models.CharField(max_length=255, null=True, blank=True)
+    address_country = models.CharField(max_length=255, null=True, blank=True)
     cvc_check = models.CharField(max_length=255, null=True, blank=True)
     address_line1_check = models.CharField(max_length=255, null=True, blank=True)
     address_zip_check = models.CharField(max_length=255, null=True, blank=True)
+    funding = models.CharField(max_length=255, null=True, blank=True, choices=FUNDING_CHOICES)
     metadata = models.JSONField(null=True, blank=True)
     country = models.CharField(max_length=255, null=True, blank=True)
     payment_method = models.ForeignKey(
         FlutterWavePaymentMethod, on_delete=models.CASCADE, related_name="cards"
     )
+    added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     customer = models.ForeignKey(
         Customer, on_delete=models.CASCADE, related_name="cards", null=True, blank=True
     )
 
     def __str__(self):
-        return f"{self.name} {self.brand} {self.last4}"
+        return f"{self.display_name} {self.brand} {self.last4}"
