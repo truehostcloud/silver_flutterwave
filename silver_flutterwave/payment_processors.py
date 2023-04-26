@@ -53,7 +53,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
 
     @staticmethod
     def charge_payment(transaction, payment_method=None):
-        raise ValueError(transaction)
+        raise NotImplementedError()
 
     @staticmethod
     def manage_payment(transaction, payment_method=None):
@@ -63,62 +63,77 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
     def client_token(customer):
         print(customer)
 
-    def handle_transaction_response(self, transaction, request):
+    @staticmethod
+    def handle_paypal_response(_transaction, request):
+        order_id = request.GET.get("order_id")
+        request = OrdersGetRequest(order_id)
+        paypal_client = PayPalClient()
+        order_response = paypal_client.client.execute(request)
+        order_status = order_response.result.status
+        order_error = True
+        if order_status == "COMPLETED":
+            order_error = False
+        verify_transaction = {
+            "status_code": order_response.status_code,
+            "status": order_status,
+            "order_id": order_response.result.id,
+            "intent": order_response.result.intent,
+            "error": order_error,
+        }
+        return verify_transaction
+
+    @staticmethod
+    def handle_stripe_response(_transaction, request):
+        payment_intent = request.GET.get("payment_intent")
+        payment_intent_client_secret = request.GET.get("STRIPE_PUBLISHABLE_KEY")
+
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+
+        verify_transaction = stripe.PaymentIntent.retrieve(
+            payment_intent, payment_intent_client_secret
+        )
+        payment_status = verify_transaction.status
+        if payment_status == "succeeded":
+            verify_transaction["error"] = False
+        else:
+            verify_transaction["error"] = payment_status
+        return verify_transaction
+
+    @staticmethod
+    def handle_mpesa_response(transaction, request):
+        business_no = request.GET.get("business_no")
+        transaction_code = request.GET.get("transaction_code")
+        base_url = "https://my.jisort.com"
+        api_path = "/general_ledger/transactions_ledger/"
+        url = f"{base_url}{api_path}"
+        response = requests.get(
+            f"{url}?business_no={business_no}&trans_id={transaction_code}"
+        )
+        verify_transaction = {}
+        if response.status_code != 200:
+            error = response.json()
+            verify_transaction["error"] = error[0]
+        else:
+            mpesa_transaction_details = response.json()
+            if float(mpesa_transaction_details["debit"]) < transaction.amount:
+                verify_transaction[
+                    "error"
+                ] = "Transaction amount is less than amount invoiced"
+            else:
+                verify_transaction = mpesa_transaction_details
+                verify_transaction["error"] = False
+        return verify_transaction
+
+    def handle_flutterwave_response(self, _transaction, request):
         tx_ref = request.GET.get("tx_ref")
+        verify_transaction = self.rave.Account.verify(tx_ref)
+        return verify_transaction
+
+    def handle_transaction_response(self, transaction, request):
         payment_processor = request.GET.get("payment_processor", "flutterwave")
         try:
-            if payment_processor == "paypal":
-                order_id = request.GET.get("order_id")
-                request = OrdersGetRequest(order_id)
-                paypal_client = PayPalClient()
-                order_response = paypal_client.client.execute(request)
-                order_status = order_response.result.status
-                order_error = True
-                if order_status == "COMPLETED":
-                    order_error = False
-                verify_transaction = {
-                    "status_code": order_response.status_code,
-                    "status": order_status,
-                    "order_id": order_response.result.id,
-                    "intent": order_response.result.intent,
-                    "error": order_error,
-                }
-            elif payment_processor == "stripe":
-                payment_intent = request.GET.get("payment_intent")
-                payment_intent_client_secret = request.GET.get("STRIPE_PUBLISHABLE_KEY")
-
-                stripe.api_key = settings.STRIPE_SECRET_KEY
-
-                verify_transaction = stripe.PaymentIntent.retrieve(
-                    payment_intent, payment_intent_client_secret
-                )
-                payment_status = verify_transaction.status
-                if payment_status == "succeeded":
-                    verify_transaction["error"] = False
-                else:
-                    verify_transaction["error"] = payment_status
-
-            elif payment_processor == "mpesa":
-                business_no = request.GET.get("business_no")
-                transaction_code = request.GET.get("transaction_code")
-                response = requests.get(
-                    f"https://my.jisort.com/general_ledger/transactions_ledger/?business_no={business_no}&trans_id={transaction_code}"
-                )
-                verify_transaction = {}
-                if response.status_code != 200:
-                    error = response.json()
-                    verify_transaction["error"] = error[0]
-                else:
-                    mpesa_transaction_details = response.json()
-                    if float(mpesa_transaction_details["debit"]) < transaction.amount:
-                        verify_transaction[
-                            "error"
-                        ] = "Transaction amount is less than amount invoiced"
-                    else:
-                        verify_transaction = mpesa_transaction_details
-                        verify_transaction["error"] = False
-            else:
-                verify_transaction = self.rave.Account.verify(tx_ref)
+            handler = getattr(self, f"handle_{payment_processor}_response")
+            verify_transaction = handler(transaction, request)
             transaction_data = {}
             transaction_data.update(transaction.data)
             transaction_data.update(verify_transaction)

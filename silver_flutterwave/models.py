@@ -1,6 +1,6 @@
 from django.db import models
 
-from silver.models import PaymentMethod
+from silver.models import PaymentMethod, Customer
 
 
 class FlutterWavePaymentMethod(PaymentMethod):
@@ -52,3 +52,39 @@ class CurrencyConversion(models.Model):
     to_currency_code = models.CharField(max_length=4, null=True, blank=True)
     rate = models.FloatField(null=True, blank=True)
     rate_date = models.DateTimeField(auto_now_add=True)
+
+
+class Card(models.Model):
+    """Model to store card details fetched from remote."""
+    BRAND_CHOICES = (
+        ("visa", "Visa"),
+        ("mastercard", "MasterCard"),
+        ("dinersclub", "Diners Club"),
+        ("discover", "Discover"),
+        ("jcb", "JCB"),
+        ("unionpay", "UnionPay"),
+        ("americanexpress", "American Express"),
+        ("eftposaustralia", "Eftpos Australia"),
+        ("unknown", "Unknown"),
+    )
+    name = models.CharField(max_length=255, null=True, blank=True)
+    external_id = models.CharField(max_length=255, null=True, blank=True)
+    external_name = models.CharField(max_length=255, null=True, blank=True)
+    brand = models.CharField(max_length=255, null=True, blank=True, choices=BRAND_CHOICES)
+    last4 = models.CharField(max_length=4, null=True, blank=True)
+    exp_month = models.CharField(max_length=2, null=True, blank=True)
+    exp_year = models.CharField(max_length=4, null=True, blank=True)
+    cvc_check = models.CharField(max_length=255, null=True, blank=True)
+    address_line1_check = models.CharField(max_length=255, null=True, blank=True)
+    address_zip_check = models.CharField(max_length=255, null=True, blank=True)
+    metadata = models.JSONField(null=True, blank=True)
+    country = models.CharField(max_length=255, null=True, blank=True)
+    payment_method = models.ForeignKey(
+        FlutterWavePaymentMethod, on_delete=models.CASCADE, related_name="cards"
+    )
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name="cards", null=True, blank=True
+    )
+
+    def __str__(self):
+        return f"{self.name} {self.brand} {self.last4}"
