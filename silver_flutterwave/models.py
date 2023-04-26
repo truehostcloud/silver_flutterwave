@@ -57,6 +57,7 @@ class CurrencyConversion(models.Model):
 
 class Card(models.Model):
     """Model to store card details fetched from remote."""
+
     BRAND_CHOICES = (
         ("visa", "Visa"),
         ("mastercard", "MasterCard"),
@@ -83,7 +84,9 @@ class Card(models.Model):
     display_name = models.CharField(max_length=255, null=True, blank=True)
     external_id = models.CharField(max_length=255, null=True, blank=True)
     external_name = models.CharField(max_length=255, null=True, blank=True)
-    brand = models.CharField(max_length=255, null=True, blank=True, choices=BRAND_CHOICES)
+    brand = models.CharField(
+        max_length=255, null=True, blank=True, choices=BRAND_CHOICES
+    )
     last4 = models.CharField(max_length=4, null=True, blank=True)
     exp_month = models.CharField(max_length=2, null=True, blank=True)
     exp_year = models.CharField(max_length=4, null=True, blank=True)
@@ -91,10 +94,14 @@ class Card(models.Model):
     address_city = models.CharField(max_length=255, null=True, blank=True)
     address_state = models.CharField(max_length=255, null=True, blank=True)
     address_country = models.CharField(max_length=255, null=True, blank=True)
-    cvc_check = models.CharField(max_length=255, null=True, blank=True, choices=CVC_CHECK_CHOICES)
+    cvc_check = models.CharField(
+        max_length=255, null=True, blank=True, choices=CVC_CHECK_CHOICES
+    )
     address_line1_check = models.CharField(max_length=255, null=True, blank=True)
     address_zip_check = models.CharField(max_length=255, null=True, blank=True)
-    funding = models.CharField(max_length=255, null=True, blank=True, choices=FUNDING_CHOICES)
+    funding = models.CharField(
+        max_length=255, null=True, blank=True, choices=FUNDING_CHOICES
+    )
     metadata = models.JSONField(null=True, blank=True)
     country = CountryField(null=True, blank=True)
     payment_method = models.ForeignKey(
@@ -107,3 +114,12 @@ class Card(models.Model):
 
     def __str__(self):
         return f"{self.display_name} {self.brand} {self.last4}"
+
+    def delete(self, using=None, keep_parents=False):
+        if self.customer:
+            users = self.customer.users.all()
+            if users:
+                users.filter(
+                    stripe_customer_id__isnull=False
+                ).first().delete_stripe_card(self.external_id)
+        super().delete(using=using, keep_parents=keep_parents)
