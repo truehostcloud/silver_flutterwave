@@ -1,6 +1,7 @@
 from django.db import models
 
 from silver.models import PaymentMethod, Customer
+from django_countries.fields import CountryField
 
 
 class FlutterWavePaymentMethod(PaymentMethod):
@@ -73,6 +74,12 @@ class Card(models.Model):
         ("prepaid", "Prepaid"),
         ("unknown", "Unknown"),
     )
+    CVC_CHECK_CHOICES = (
+        ("pass", "Pass"),
+        ("fail", "Fail"),
+        ("unavailable", "Unavailable"),
+        ("unchecked", "Unchecked"),
+    )
     display_name = models.CharField(max_length=255, null=True, blank=True)
     external_id = models.CharField(max_length=255, null=True, blank=True)
     external_name = models.CharField(max_length=255, null=True, blank=True)
@@ -84,12 +91,12 @@ class Card(models.Model):
     address_city = models.CharField(max_length=255, null=True, blank=True)
     address_state = models.CharField(max_length=255, null=True, blank=True)
     address_country = models.CharField(max_length=255, null=True, blank=True)
-    cvc_check = models.CharField(max_length=255, null=True, blank=True)
+    cvc_check = models.CharField(max_length=255, null=True, blank=True, choices=CVC_CHECK_CHOICES)
     address_line1_check = models.CharField(max_length=255, null=True, blank=True)
     address_zip_check = models.CharField(max_length=255, null=True, blank=True)
     funding = models.CharField(max_length=255, null=True, blank=True, choices=FUNDING_CHOICES)
     metadata = models.JSONField(null=True, blank=True)
-    country = models.CharField(max_length=255, null=True, blank=True)
+    country = CountryField(null=True, blank=True)
     payment_method = models.ForeignKey(
         FlutterWavePaymentMethod, on_delete=models.CASCADE, related_name="cards"
     )
