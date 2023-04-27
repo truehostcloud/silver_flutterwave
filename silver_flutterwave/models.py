@@ -1,6 +1,9 @@
+import stripe
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
-from silver.models import PaymentMethod, Customer
+from silver.models import PaymentMethod, Customer as BaseCustomer
 from django_countries.fields import CountryField
 
 
@@ -55,6 +58,64 @@ class CurrencyConversion(models.Model):
     rate_date = models.DateTimeField(auto_now_add=True)
 
 
+class Customer(BaseCustomer):
+    stripe_customer_id = models.CharField(max_length=255, null=True, blank=True)
+
+    def get_stripe_customer_id(self):
+        """Get the stripe customer id for this customer"""
+        if not self.stripe_customer_id:
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            customer = stripe.Customer.create(
+                email=self.email,
+                name=self.name(),
+                description=self.name(),
+            )
+            self.stripe_customer_id = customer.id
+            self.save()
+        return self.stripe_customer_id
+
+    def add_stripe_card(self, token, name):
+        """
+        Add a card to a customer's account
+        :param token:
+        :param name:
+        :return:
+        """
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe_customer_id = self.get_stripe_customer_id()
+        try:
+            stripe.Customer.create_source(
+                stripe_customer_id, source=token, metadata={"name": name}
+            )
+        except stripe.error.CardError as e:
+            # Since it's a decline, stripe.error.CardError will be caught
+            body = e.json_body
+            err = body.get("error", {})
+            raise ValidationError(err.get("message"))
+        card = stripe.Token.retrieve(token).card
+        return card
+
+    def delete_stripe_card(self, card_id):
+        """
+        Delete a card from a customer's account
+        :param card_id:
+        :return:
+        """
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe_customer_id = self.get_stripe_customer_id()
+        stripe.Customer.delete_source(stripe_customer_id, card_id)
+
+    def card_exists(self, token):
+        """
+        Check if a customer has a card with the given fingerprint
+        :param token:
+        :return:
+        """
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        card = stripe.Token.retrieve(token).card
+        return self.cards.filter(fingerprint=card.fingerprint).exists()
+
+
 class Card(models.Model):
     """Model to store card details fetched from remote."""
 
@@ -83,6 +144,7 @@ class Card(models.Model):
     )
     display_name = models.CharField(max_length=255, null=True, blank=True)
     external_id = models.CharField(max_length=255, null=True, blank=True)
+    fingerprint = models.CharField(max_length=255, null=True, blank=True)
     external_name = models.CharField(max_length=255, null=True, blank=True)
     brand = models.CharField(
         max_length=255, null=True, blank=True, choices=BRAND_CHOICES
@@ -111,15 +173,12 @@ class Card(models.Model):
     customer = models.ForeignKey(
         Customer, on_delete=models.CASCADE, related_name="cards", null=True, blank=True
     )
+    default = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.display_name} {self.brand} {self.last4}"
 
     def delete(self, using=None, keep_parents=False):
         if self.customer:
-            users = self.customer.users.all()
-            if users:
-                users.filter(
-                    stripe_customer_id__isnull=False
-                ).first().delete_stripe_card(self.external_id)
+            self.customer.delete_stripe_card(self.external_id)
         super().delete(using=using, keep_parents=keep_parents)
