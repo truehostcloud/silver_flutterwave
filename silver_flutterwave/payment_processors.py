@@ -71,9 +71,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         """Settle the transaction and call the success callback if it exists."""
         transaction.settle()
         try:
-            import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(
-                transaction
-            )
+            import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(transaction)
         except AttributeError:
             pass
         transaction.save()
@@ -105,9 +103,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         return payload
 
     def create_stripe_payment_intent(self, transaction, request):
-        payload = self.build_stripe_payment_intent_payload(
-            transaction, request
-        )
+        payload = self.build_stripe_payment_intent_payload(transaction, request)
         transaction_data = transaction.data or {}
         if transaction_data.get("id") and transaction_data.get("client_secret"):
             return transaction_data
@@ -119,7 +115,10 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             transaction_data.update(intent_response)
             transaction.data = transaction_data
             transaction.save()
-            if intent_response.status == "succeeded" and intent_response.amount == intent_response.amount_received:
+            if (
+                intent_response.status == "succeeded"
+                and intent_response.amount == intent_response.amount_received
+            ):
                 self.settle_transaction(transaction)
             return intent_response
         except stripe.error.InvalidRequestError as e:
