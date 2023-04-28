@@ -67,8 +67,8 @@ class Customer(BaseCustomer):
             stripe.api_key = settings.STRIPE_SECRET_KEY
             customer = stripe.Customer.create(
                 email=self.email,
-                name=self.name(),
-                description=self.name(),
+                name=self.name,
+                description=self.name,
             )
             self.stripe_customer_id = customer.id
             self.save()
