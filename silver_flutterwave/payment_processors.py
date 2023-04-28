@@ -16,6 +16,7 @@ from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
 import stripe
+from silver.models import Transaction
 
 
 class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
@@ -75,6 +76,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         except AttributeError:
             pass
         transaction.save()
+        return transaction
 
     @staticmethod
     def build_stripe_payment_intent_payload(transaction, request):
@@ -219,8 +221,40 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         transaction.save()
 
     def execute_transaction(self, transaction):
-        print("Executing transaction")
         self.create_stripe_payment_intent(transaction, None)
+
+    def fetch_transaction_status(self, transaction):
+        transaction_data = transaction.data or {}
+        if transaction_data.get("id") and transaction_data.get("client_secret"):
+            payment_intent_id = transaction_data.get("id")
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            payment_intent = stripe.PaymentIntent.retrieve(
+                payment_intent_id, expand=["latest_charge"]
+            )
+            transaction_data = {}
+            transaction_data.update(transaction.data)
+            transaction_data.update(payment_intent)
+            transaction.data = transaction_data
+            refunded = payment_intent.latest_charge.refunded
+            if (
+                payment_intent.status == "succeeded"
+                and payment_intent.amount == payment_intent.amount_received
+                and transaction.state
+                in [Transaction.States.Pending, Transaction.States.Initial]
+            ):
+                transaction = self.settle_transaction(transaction)
+            if refunded and transaction.state == Transaction.States.Settled:
+                refunds = stripe.Refund.list(
+                    charge=payment_intent.latest_charge.id
+                )
+                refund_reason = None
+                for refund in refunds:
+                    refund_reason = refund.reason
+                    break
+                transaction.refund(
+                    refund_code=refund_reason,
+                )
+            transaction.save()
 
 
 class FlutterWaveTriggered(FlutterWaveTriggeredBase):
