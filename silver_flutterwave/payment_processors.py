@@ -244,9 +244,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             ):
                 transaction = self.settle_transaction(transaction)
             if refunded and transaction.state == Transaction.States.Settled:
-                refunds = stripe.Refund.list(
-                    charge=payment_intent.latest_charge.id
-                )
+                refunds = stripe.Refund.list(charge=payment_intent.latest_charge.id)
                 refund_reason = None
                 for refund in refunds:
                     refund_reason = refund.reason
