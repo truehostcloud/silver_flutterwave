@@ -180,5 +180,11 @@ class Card(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         if self.customer:
+            if self.default:
+                customer_cards = self.customer.cards.all()
+                if customer_cards.count() > 1:
+                    new_default = customer_cards.exclude(id=self.id).first()
+                    new_default.default = True
+                    new_default.save()
             self.customer.delete_stripe_card(self.external_id)
         super().delete(using=using, keep_parents=keep_parents)

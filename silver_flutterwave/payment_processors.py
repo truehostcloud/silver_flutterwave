@@ -99,6 +99,8 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 payload["off_session"] = True
                 payload["confirm"] = True
                 return_url = f"{get_payment_complete_url(transaction, request)}?payment_processor=stripe"
+                if request is None:
+                    return_url = f"{settings.SILVER_DEFAULT_BASE_URL}{return_url}"
                 payload["return_url"] = return_url
         return payload
 
@@ -121,6 +123,11 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 self.settle_transaction(transaction)
             return intent_response
         except stripe.error.InvalidRequestError as e:
+            transaction_data = {}
+            transaction_data.update(transaction.data)
+            transaction_data.update(e.json_body)
+            transaction.data = transaction_data
+            transaction.save()
             return e
 
     @staticmethod
@@ -213,6 +220,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         transaction.save()
 
     def execute_transaction(self, transaction):
+        print("Executing transaction")
         self.create_stripe_payment_intent(transaction, None)
 
 
