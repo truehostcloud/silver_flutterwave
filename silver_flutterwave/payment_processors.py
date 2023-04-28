@@ -2,6 +2,8 @@ import requests
 import paypalhttp
 from django.conf import settings
 from django.utils.module_loading import import_string
+from money.currency import Currency
+from money.money import Money
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from rave_python import Rave
 from rave_python.rave_exceptions import TransactionVerificationError
@@ -9,6 +11,7 @@ from rave_python.rave_exceptions import TransactionVerificationError
 from silver.payment_processors import PaymentProcessorBase
 from silver.payment_processors.forms import GenericTransactionForm
 from silver.payment_processors.mixins import TriggeredProcessorMixin
+from silver.utils.payments import get_payment_complete_url
 from .models import FlutterWavePaymentMethod
 from .paypal_client import PayPalClient
 from .views import FlutterWaveTransactionView
@@ -61,7 +64,64 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
 
     @staticmethod
     def client_token(customer):
-        print(customer)
+        return customer.id
+
+    @staticmethod
+    def settle_transaction(transaction):
+        """Settle the transaction and call the success callback if it exists."""
+        transaction.settle()
+        try:
+            import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(
+                transaction
+            )
+        except AttributeError:
+            pass
+        transaction.save()
+
+    @staticmethod
+    def build_stripe_payment_intent_payload(transaction, request):
+        """Build the payload for the Stripe Payment Intent API call."""
+        amount = transaction.invoice.total
+        currency = transaction.invoice.currency
+        customer = transaction.customer
+        extended_customer = customer.customer
+        smallest_amount_unit = Money(amount, getattr(Currency, currency)).sub_units
+        payload = {
+            "amount": smallest_amount_unit,
+            "currency": currency,
+            "automatic_payment_methods[enabled]": True,
+        }
+        if extended_customer.stripe_customer_id:
+            payload["customer"] = extended_customer.stripe_customer_id
+            customer_card = extended_customer.cards.filter(default=True).first()
+            if customer_card:
+                payload["payment_method"] = customer_card.external_id
+                payload["off_session"] = True
+                payload["confirm"] = True
+                return_url = f"{get_payment_complete_url(transaction, request)}?payment_processor=stripe"
+                payload["return_url"] = return_url
+        return payload
+
+    def create_stripe_payment_intent(self, transaction, request):
+        payload = self.build_stripe_payment_intent_payload(
+            transaction, request
+        )
+        transaction_data = transaction.data or {}
+        if transaction_data.get("id") and transaction_data.get("client_secret"):
+            return transaction_data
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        try:
+            intent_response = stripe.PaymentIntent.create(**payload)
+            transaction_data = {}
+            transaction_data.update(transaction.data)
+            transaction_data.update(intent_response)
+            transaction.data = transaction_data
+            transaction.save()
+            if intent_response.status == "succeeded" and intent_response.amount == intent_response.amount_received:
+                self.settle_transaction(transaction)
+            return intent_response
+        except stripe.error.InvalidRequestError as e:
+            return e
 
     @staticmethod
     def handle_paypal_response(_transaction, request):
@@ -83,8 +143,11 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         return verify_transaction
 
     @staticmethod
-    def handle_stripe_response(_transaction, request):
+    def handle_stripe_response(transaction, request):
         payment_intent = request.GET.get("payment_intent")
+        if payment_intent in [None, ""]:
+            transaction_data = transaction.data
+            payment_intent = transaction_data.get("id")
         payment_intent_client_secret = request.GET.get("STRIPE_PUBLISHABLE_KEY")
 
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -139,13 +202,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             transaction_data.update(verify_transaction)
             transaction.data = transaction_data
             if verify_transaction["error"] is False:
-                transaction.settle()
-                try:
-                    import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(
-                        transaction
-                    )
-                except AttributeError:
-                    pass
+                self.settle_transaction(transaction)
         except (TransactionVerificationError, paypalhttp.http_error.HttpError) as e:
             if payment_processor == "paypal":
                 transaction_data = {"fail_reason": e}
@@ -154,6 +211,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             transaction_data.update(transaction.data)
             transaction.data = transaction_data
         transaction.save()
+
+    def execute_transaction(self, transaction):
+        self.create_stripe_payment_intent(transaction, None)
 
 
 class FlutterWaveTriggered(FlutterWaveTriggeredBase):

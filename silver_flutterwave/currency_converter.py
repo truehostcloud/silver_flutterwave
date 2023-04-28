@@ -134,6 +134,8 @@ class CurrencyConverter:
         Returns:
           Decimal, converted amount or conversion rate.
         """
+        if from_currency == to_currency or to_currency is None:
+            return Decimal(amount)
         currency_converter_api_key = settings.CURRENCY_CONVERTER_API_KEY
         exchange_rate_api_key = settings.EXCHANGE_RATE_API_KEY
 
