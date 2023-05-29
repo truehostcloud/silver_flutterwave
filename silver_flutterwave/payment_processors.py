@@ -132,6 +132,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             transaction_data.update(transaction.data)
             transaction_data.update(e.json_body)
             transaction.data = transaction_data
+            transaction.state = Transaction.States.Initial
             transaction.save()
             return e
 
