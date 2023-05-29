@@ -105,6 +105,10 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         return payload
 
     def create_stripe_payment_intent(self, transaction, request):
+        """Create a Stripe Payment Intent."""
+        if transaction.invoice.total <= 0:
+            self.settle_transaction(transaction)
+            return None
         payload = self.build_stripe_payment_intent_payload(transaction, request)
         transaction_data = transaction.data or {}
         if transaction_data.get("id") and transaction_data.get("client_secret"):
