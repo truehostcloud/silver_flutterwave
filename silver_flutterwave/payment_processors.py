@@ -127,7 +127,14 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             ):
                 self.settle_transaction(transaction)
             return intent_response
-        except stripe.error.InvalidRequestError as e:
+        except (
+            stripe.error.InvalidRequestError,
+            stripe.error.CardError,
+            stripe.error.AuthenticationError,
+            stripe.error.APIConnectionError,
+            stripe.error.StripeError,
+            stripe.error.RateLimitError,
+        ) as e:
             transaction_data = {}
             transaction_data.update(transaction.data)
             transaction_data.update(e.json_body)
