@@ -15,6 +15,8 @@ class CardAdmin(admin.ModelAdmin):
         "exp_year",
         "country",
         "customer",
+        "active",
+        "decline_code",
     )
 
 

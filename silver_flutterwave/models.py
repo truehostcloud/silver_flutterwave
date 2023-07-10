@@ -185,6 +185,9 @@ class Card(models.Model):
         Customer, on_delete=models.CASCADE, related_name="cards", null=True, blank=True
     )
     default = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
+    decline_code = models.CharField(max_length=255, null=True, blank=True)
+    decline_codes_counters = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.display_name} {self.brand} {self.last4}"

@@ -91,6 +91,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             "currency": currency,
             "automatic_payment_methods[enabled]": True,
         }
+        customer_card = None
         if extended_customer.stripe_customer_id:
             payload["customer"] = extended_customer.stripe_customer_id
             customer_card = extended_customer.cards.filter(default=True).first()
@@ -102,14 +103,14 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 if request is None:
                     return_url = f"{settings.SILVER_DEFAULT_BASE_URL}{return_url}"
                 payload["return_url"] = return_url
-        return payload
+        return payload, customer_card
 
     def create_stripe_payment_intent(self, transaction, request):
         """Create a Stripe Payment Intent."""
         if transaction.invoice.total <= 0:
             self.settle_transaction(transaction)
             return None
-        payload = self.build_stripe_payment_intent_payload(transaction, request)
+        payload, customer_card = self.build_stripe_payment_intent_payload(transaction, request)
         transaction_data = transaction.data or {}
         if transaction_data.get("id") and transaction_data.get("client_secret"):
             return transaction_data
@@ -136,6 +137,14 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             stripe.error.RateLimitError,
         ) as e:
             transaction_data = {}
+            error_data = e.json_body.get("error")
+            if error_data:
+                decline_code = error_data.get("decline_code")
+                if decline_code:
+                    try:
+                        import_string(settings.SILVER_CARD_DECLINE_CALLBACK)(customer_card, transaction)
+                    except AttributeError:
+                        pass
             transaction_data.update(transaction.data)
             transaction_data.update(e.json_body)
             transaction.data = transaction_data
