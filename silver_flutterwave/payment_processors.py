@@ -94,7 +94,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         customer_card = None
         if extended_customer.stripe_customer_id:
             payload["customer"] = extended_customer.stripe_customer_id
-            customer_card = extended_customer.cards.filter(default=True, active=True).first()
+            customer_card = extended_customer.cards.filter(
+                default=True, active=True
+            ).first()
             if customer_card:
                 payload["payment_method"] = customer_card.external_id
                 payload["off_session"] = True
@@ -110,7 +112,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         if transaction.invoice.total <= 0:
             self.settle_transaction(transaction)
             return None
-        payload, customer_card = self.build_stripe_payment_intent_payload(transaction, request)
+        payload, customer_card = self.build_stripe_payment_intent_payload(
+            transaction, request
+        )
         transaction_data = transaction.data or {}
         if transaction_data.get("id") and transaction_data.get("client_secret"):
             return transaction_data
@@ -141,7 +145,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             decline_code = error_data.get("decline_code")
             if decline_code:
                 try:
-                    import_string(settings.SILVER_CARD_DECLINE_CALLBACK)(customer_card, transaction)
+                    import_string(settings.SILVER_CARD_DECLINE_CALLBACK)(
+                        customer_card, transaction
+                    )
                 except AttributeError:
                     pass
             transaction_data.update(transaction.data)
