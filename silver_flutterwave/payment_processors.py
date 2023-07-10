@@ -137,14 +137,13 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
             stripe.error.RateLimitError,
         ) as e:
             transaction_data = {}
-            error_data = e.json_body.get("error")
-            if error_data:
-                decline_code = error_data.get("decline_code")
-                if decline_code:
-                    try:
-                        import_string(settings.SILVER_CARD_DECLINE_CALLBACK)(customer_card, transaction)
-                    except AttributeError:
-                        pass
+            error_data = e.json_body.get("error", {})
+            decline_code = error_data.get("decline_code")
+            if decline_code:
+                try:
+                    import_string(settings.SILVER_CARD_DECLINE_CALLBACK)(customer_card, transaction)
+                except AttributeError:
+                    pass
             transaction_data.update(transaction.data)
             transaction_data.update(e.json_body)
             transaction.data = transaction_data
