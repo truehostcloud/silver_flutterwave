@@ -115,6 +115,17 @@ class Customer(BaseCustomer):
         card = stripe.Token.retrieve(token).card
         return self.cards.filter(fingerprint=card.fingerprint).exists()
 
+    @classmethod
+    def card_reused(cls, token):
+        """
+        Check if a card has been used by any customer
+        :param token:
+        :return:
+        """
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        card = stripe.Token.retrieve(token).card
+        return cls.objects.filter(cards__fingerprint=card.fingerprint).exists()
+
 
 class Card(models.Model):
     """Model to store card details fetched from remote."""
