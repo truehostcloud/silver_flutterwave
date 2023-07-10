@@ -94,7 +94,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         customer_card = None
         if extended_customer.stripe_customer_id:
             payload["customer"] = extended_customer.stripe_customer_id
-            customer_card = extended_customer.cards.filter(default=True).first()
+            customer_card = extended_customer.cards.filter(default=True, active=True).first()
             if customer_card:
                 payload["payment_method"] = customer_card.external_id
                 payload["off_session"] = True
