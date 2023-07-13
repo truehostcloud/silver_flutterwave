@@ -103,6 +103,9 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 if request is None:
                     return_url = f"{settings.SILVER_DEFAULT_BASE_URL}{return_url}"
                 payload["return_url"] = return_url
+            else:
+                transaction.state = Transaction.States.Initial
+                transaction.save()
         return payload, customer_card
 
     def create_stripe_payment_intent(self, transaction, request):
