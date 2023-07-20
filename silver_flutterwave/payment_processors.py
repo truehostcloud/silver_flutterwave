@@ -68,14 +68,19 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
         return customer.id
 
     @staticmethod
-    def settle_transaction(transaction):
+    def settle_transaction(transaction, customer_card=None):
         """Settle the transaction and call the success callback if it exists."""
         transaction.settle()
+        transaction.save()
         try:
             import_string(settings.SILVER_SUCCESS_TRANSACTION_CALLBACK)(transaction)
         except AttributeError:
             pass
-        transaction.save()
+        try:
+            if customer_card:
+                import_string(settings.SILVER_CARD_CHARGE_CALLBACK)(customer_card, transaction)
+        except AttributeError:
+            pass
         return transaction
 
     @staticmethod
@@ -129,7 +134,7 @@ class FlutterWaveTriggeredBase(PaymentProcessorBase, TriggeredProcessorMixin):
                 intent_response.status == "succeeded"
                 and intent_response.amount == intent_response.amount_received
             ):
-                self.settle_transaction(transaction)
+                self.settle_transaction(transaction, customer_card)
             return intent_response
         except (
             stripe.error.InvalidRequestError,
